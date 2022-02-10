@@ -1,6 +1,7 @@
 import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/model/account.dart';
 import 'package:account_app/widget/card_view.dart';
+import 'package:account_app/widget/pieCharts_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -105,10 +106,12 @@ class _HomePageState extends State<HomePage> {
                       flex: 7,
                       child: Container(
                           alignment: Alignment.center,
-                          child: Text(
-                            '結餘',
-                            style: TextStyle(fontSize: 20),
-                          )),
+                          child: OutcomeChart(),
+                          // child: Text(
+                          //   '結餘',
+                          //   style: TextStyle(fontSize: 20),
+                          // )
+                      ),
                     ),
                     Expanded(
                       //上右:收入
