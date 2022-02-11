@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+List list = ["日"," 一","二","三","四","五","六"];
 
 class SliverAppBarDemo extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class SliverAppBarDemo extends StatelessWidget {
         ),
         title: Text('User'),
       ),
+
       body: CustomScrollView(
         slivers: <Widget>[
         SliverAppBar(
@@ -33,22 +35,21 @@ class SliverAppBarDemo extends StatelessWidget {
           ),
         ),
       ),
-      SliverToBoxAdapter(
-        child: ListView.builder(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: 1,
-            itemBuilder: (ctx, i)=> Card(
-                child: ListTile(
-                  leading: Icon(Icons.edit),
-                  title:Text("資料"),
-                  onTap: (){
-                    daata(context);
-                  },
-                )
-            )
-        ),
-      )
+          SliverPadding(
+            padding: const EdgeInsets.all(8.0),
+            sliver: SliverFixedExtentList(
+              itemExtent: 55.0,
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: Text('星期 ${list[index]}'),
+                  );
+                },
+                childCount: 7,
+              ),
+            ),
+          ),
         ],
       ),
     );
