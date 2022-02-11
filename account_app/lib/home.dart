@@ -95,20 +95,32 @@ class _HomePageState extends State<HomePage> {
                       //上左:支出
                       flex: 2,
                       child: Container(
-                          padding: EdgeInsets.only(left: 10, top: 10),
-                          color: Colors.pink,
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            '支出',
-                            style: TextStyle(fontSize: 20),
-                          )),
+                        padding: EdgeInsets.only(right: 10, top: 10),
+                        color: Colors.black12,
+                        alignment: Alignment.topCenter,
+                        // child: Text(
+                        //   '收入',
+                        //   style: TextStyle(fontSize: 20),
+                        // )
+                        child: Column(
+                          children: [
+                            Text(
+                              '支出',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            TextField(
+                              onChanged: (text) {
+                                print('收入:\n $text');
+                              },
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                     Expanded(
                       //上中:結餘
                       flex: 7,
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: OutcomeChart(),
+                      child: OutcomeChart(
                           // child: Text(
                           //   '結餘',
                           //   style: TextStyle(fontSize: 20),
@@ -120,12 +132,27 @@ class _HomePageState extends State<HomePage> {
                       flex: 2,
                       child: Container(
                           padding: EdgeInsets.only(right: 10, top: 10),
-                          color: Colors.pink,
+                          color: Colors.black12,
                           alignment: Alignment.topCenter,
-                          child: Text(
-                            '收入',
-                            style: TextStyle(fontSize: 20),
-                          )),
+                          // child: Text(
+                          //   '收入',
+                          //   style: TextStyle(fontSize: 20),
+                          // )
+                        child: Column(
+                            children: [
+                              Text(
+                                '收入',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              TextField(
+                                onChanged: (text) {
+                                  print('收入:\n $text');
+                                },
+                              )
+                            ],
+                        ),
+                      )
+                      ,
                     ),
                   ],
                 )),
