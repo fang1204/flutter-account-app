@@ -1,5 +1,6 @@
 import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/model/account.dart';
+import 'package:account_app/pages/routes.dart';
 import 'package:account_app/widget/accountInput_view.dart';
 import 'package:account_app/widget/card_view.dart';
 import 'package:account_app/widget/pieCharts_view.dart';
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children:  <Widget>[
             UserAccountsDrawerHeader(
+
               decoration: BoxDecoration(
                 color: Color.fromARGB(0xFF, 181, 215, 212),
               ),
@@ -96,11 +98,11 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.mail),
-              title: Text('聯絡資料'),
+              title: Text('行程'),
               subtitle: Text('Contact information'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: (){
-                showAlert(context);
+                Navigator.pushReplacementNamed(context,GitmeRebornRoutes.user);
               },
             ),
           ],
