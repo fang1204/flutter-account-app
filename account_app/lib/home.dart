@@ -1,9 +1,11 @@
 import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/model/account.dart';
+import 'package:account_app/widget/accountInput_view.dart';
 import 'package:account_app/widget/card_view.dart';
 import 'package:account_app/widget/pieCharts_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -127,12 +129,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 )),
+
             Expanded(
                 //中頁面:內縮10要放一個清單在這裡
                 flex: 13,
                 child: Container(
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.all(10),
+                  /*
                   child: ListView.builder(                 //主頁面
 
                     // itemCount: creditAccount.length,
@@ -141,129 +145,37 @@ class _HomePageState extends State<HomePage> {
                       return CardView(
                           data.getCreditCardList()[position]
                       );
+
+
                     },
 
-
                   ),
+                  */
                   // color: Colors.cyanAccent,
                   // child: Text(
                   //   '紀錄list',
                   //   textScaleFactor: 1,
                   //   style: TextStyle(fontSize: 20.0),
                   // ),
-                )),
+                )
+            ),
+
           ],
         ),
+
+        //Ting編輯
         floatingActionButton: FloatingActionButton(     //浮動按鈕
           backgroundColor: Color.fromARGB(0xFF, 250, 175, 165),
           foregroundColor: Colors.white,
-          onPressed: () {  },
-          child: IconButton(
-            onPressed: (){
-
-              HomeAccount _homeAccount = HomeAccount(name: '', date: 'date', items: 'items', quantity: 0, rate: 0, remark: 'remark');
-
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return AlertDialog(
-                      title: Text('Add Account'),
-                      content: Column(
-                        children: [
-
-                          TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Add Name',
-                              labelText: 'Add Name',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.name = value;
-
-                            },
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Add Date',
-                              labelText: 'Add Date',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.date = value;
-
-                            },
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Add Item',
-                              labelText: 'Add Item',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.items = value;
-
-                            },
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: 'Add Quantity',
-                              labelText: 'Add Quantity',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.quantity = int.parse(value);
-
-                            },
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: 'Add Rate',
-                              labelText: 'Add Rate',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.rate = int.parse(value);
-
-                            },
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Add Remark',
-                              labelText: 'Add Remark',
-                            ),
-                            onChanged: (value){
-                              _homeAccount.remark = value;
-
-                            },
-                          ),
-
-                        ],
-
-                      ),
-                      actions: [
-                        IconButton(
-                          color: Colors.green,
-                          icon: Icon(Icons.check),
-                          onPressed: (){
-                            // setState(() {
-                            //   creditAccount.add(_creditAccount);
-                            // });
-                            data.addCreditAccount(_homeAccount);
-                            Navigator.pop(context);
-                          },
-                        ),
-                        IconButton(
-                          color: Colors.red,
-                          icon: Icon(Icons.close),
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  });
-            },
-            icon: Icon(Icons.add),),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context)=>AccountInputView()), (route) => false);
+          },
+          child: Icon(Icons.add),
 
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
       );
     });
   }
