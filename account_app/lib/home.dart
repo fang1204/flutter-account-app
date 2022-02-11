@@ -84,8 +84,11 @@ class _HomePageState extends State<HomePage> {
       ),
 
       body: Container(
+        width: Adaptive.w(100),    // This will take 20% of the screen's width
+        height: Adaptive.h(100),
         //主頁面/*雯坊*/
         child: (
+
           Consumer<HomeAccountList>(
             builder: (context, data, child){
               return Column(
