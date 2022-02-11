@@ -43,9 +43,9 @@ class _OutcomeChartState extends State<OutcomeChart> {
                 xValueMapper: (IEData data, _) => data.s,
                 yValueMapper: (IEData data, _) => data.num,
                 dataLabelSettings: DataLabelSettings(isVisible: true),
-                enableTooltip: true,
-                explode: true,
-                explodeAll: true,
+                // enableTooltip: true,
+                // explode: true,
+                // explodeAll: true,
                 // explodeOffset: '10%',
               )
             ],
