@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/bill_data.dart';
+import '../utils/util.dart';
 
 class BillItem extends StatelessWidget {
   const BillItem({
@@ -14,42 +15,25 @@ class BillItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Container(     //清單中的分類
-        height: 40,
+        height: 30,
         width: 30,
         color: Colors.red,
       ),
-      // title: Row(
-      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //   children: [
-      //     Expanded(
-      //       child: Text(
-      //         "${bill.title}",
-      //         overflow: TextOverflow.ellipsis,
-      //         maxLines: 1,
-      //       ),
-      //     ),
-      //     Text(
-      //       "${bill.time}",
-      //       style: TextStyle(
-      //         fontSize: 12.0,
-      //       ),
-      //     ),
-      //   ],
-      // ),
-      subtitle: Row(
+
+      title:  Row(
         children: [
           Expanded(
+            flex: 3,
             child: Text(
-              "${bill.itemType}",
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+              typeToString(bill.type!, bill.itemType!),
+              maxLines: 2,
             ),
           ),
           Expanded(
+            flex: 1,
             child: Text(
               "${bill.quantity}",
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+              maxLines: 2,
             ),
           ),
         ],
@@ -57,3 +41,4 @@ class BillItem extends StatelessWidget {
     );
   }
 }
+
