@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         //清單
         child: ListView(
-          children: const <Widget>[
+          children:  <Widget>[
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Color.fromARGB(0xFF, 181, 215, 212),
@@ -70,14 +70,38 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.equalizer_rounded),
               title: Text('帳務報表'),
+              subtitle: Text('Account'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+                print("還沒做");
+              },
             ),
             ListTile(
               leading: Icon(Icons.category_outlined),
               title: Text('分類管理'),
+              subtitle: Text('Classification'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+                print("還沒做");
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('功能設定'),
+              subtitle: Text('Settings'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, "/setting");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.mail),
+              title: Text('聯絡資料'),
+              subtitle: Text('Contact information'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+                showAlert(context);
+              },
             ),
           ],
         ),
@@ -412,4 +436,24 @@ class _HomePageState extends State<HomePage> {
     });
     */
   }
+}
+
+Future<void> showAlert(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Mail'),
+        content: const Text('. . . @gmail.com'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('確定'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

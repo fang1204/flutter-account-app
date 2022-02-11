@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'balance.dart';
+import 'package:account_app/pages/routes.dart';
+import 'package:account_app/pages/setting.dart';
+import 'package:account_app/pages/about.dart';
+import 'package:account_app/pages/user.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -25,6 +30,13 @@ class MyApp extends StatelessWidget {
             return HomePage();
           },
         ),
+        routes: {
+          GitmeRebornRoutes.setting: (context) => SettingPage(),
+          GitmeRebornRoutes.home: (context) => HomePage(),
+          GitmeRebornRoutes.about: (context) => AboutPage(),
+          GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
+
+        },
         // home: HomePage(),
       ),
     );
