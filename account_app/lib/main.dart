@@ -13,8 +13,9 @@ class MyApp extends StatelessWidget {
     //MultiProvider，因為一個 APP 很少一個 provider 就夠用，所以直接上 MultiProvider 。
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-            value: HomeAccountList()
+        ChangeNotifierProvider(
+            create: (_) => new HomeAccountList()
+            // value: HomeAccountList()
         )
       ],
       child: MaterialApp(
