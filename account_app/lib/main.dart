@@ -2,6 +2,7 @@ import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'balance.dart';
 void main() {
   runApp(MyApp());
@@ -13,12 +14,18 @@ class MyApp extends StatelessWidget {
     //MultiProvider，因為一個 APP 很少一個 provider 就夠用，所以直接上 MultiProvider 。
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-            value: HomeAccountList()
+        ChangeNotifierProvider(
+            create: (_) => new HomeAccountList()
+            // value: HomeAccountList()
         )
       ],
       child: MaterialApp(
-        home: HomePage(),
+        home: ResponsiveSizer(
+          builder: (context, orientation, screenType) {
+            return HomePage();
+          },
+        ),
+        // home: HomePage(),
       ),
     );
   }
