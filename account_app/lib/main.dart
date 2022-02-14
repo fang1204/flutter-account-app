@@ -7,7 +7,7 @@ import 'balance.dart';
 import 'package:account_app/pages/routes.dart';
 import 'package:account_app/pages/setting.dart';
 import 'package:account_app/pages/about.dart';
-import 'package:account_app/pages/user.dart';
+import 'package:account_app/pages/User.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,16 +20,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) => new HomeAccountList()
-            // value: HomeAccountList()
-        )
+            create: (_) => new HomeAccountList()           // value: HomeAccountList()
+        ),
       ],
       child: MaterialApp(
         home: ResponsiveSizer(
           builder: (context, orientation, screenType) {
             return HomePage();
+
           },
         ),
+        debugShowCheckedModeBanner: false,
         routes: {
           GitmeRebornRoutes.setting: (context) => SettingPage(),
           GitmeRebornRoutes.home: (context) => HomePage(),
