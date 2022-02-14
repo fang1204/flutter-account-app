@@ -1,4 +1,5 @@
 
+import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/items_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +12,22 @@ class ListItem extends StatefulWidget {
 
 class _ListItemState extends State<ListItem> {
   List<BillData> _bill = fakeData;
+  int p_sum = 0;
+  int n_sum = 0;
   @override
   Widget build(BuildContext context) {
+
     return ListView.builder(
+
       physics: BouncingScrollPhysics(),     //滾動
       itemCount: _bill.length,                     //list長度
       shrinkWrap: true,                     //只占據畫面上所需要的大小
       itemBuilder: (context,index){
+
+
         return Dismissible(
+
+
           key: UniqueKey(),               //StatefulWidget需要定義給他的
           direction: DismissDirection.horizontal,     //方向
           onDismissed: (direction) {
@@ -44,17 +53,12 @@ class _ListItemState extends State<ListItem> {
             color: Colors.red,
             child: Icon(Icons.delete, color: Colors.white),
           ),
+
           child: BillItem(bill: _bill[index]),
         );
+
       },
     );
   }
 }
-void showSnakbar(context, String s) {
-  final snackBar = SnackBar(
-    content: Text('$s'),
-    duration: Duration(milliseconds: 500),
-    behavior: SnackBarBehavior.floating,
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}
+

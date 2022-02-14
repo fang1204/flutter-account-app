@@ -11,9 +11,11 @@ class BillItem extends StatelessWidget {
 
   final BillData bill;
 
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
+
       leading: Container(     //清單中的分類
         height: 30,
         width: 30,
@@ -23,17 +25,17 @@ class BillItem extends StatelessWidget {
       title:  Row(
         children: [
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Text(
-              typeToString(bill.type!, bill.itemType!),
-              maxLines: 2,
+              typeToList(bill.type!, bill.itemType!)[0],
+              // maxLines: 2,
             ),
           ),
           Expanded(
             flex: 1,
             child: Text(
-              "${bill.quantity}",
-              maxLines: 2,
+              "\$"+typeToList(bill.type!, bill.itemType!)[1]+"${bill.quantity}",
+              // maxLines: 2,
             ),
           ),
         ],

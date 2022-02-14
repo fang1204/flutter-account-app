@@ -1,4 +1,5 @@
 //雯坊
+import 'package:account_app/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -15,6 +16,7 @@ class _OutcomeChartState extends State<OutcomeChart> {
 
   late List<IEData> _chartData;
   late TooltipBehavior _tooltipBehavior;
+
   @override
 
   void initState(){
@@ -55,8 +57,8 @@ class _OutcomeChartState extends State<OutcomeChart> {
   }
   List<IEData> getChartData(){
     final List<IEData> chartData = [
-      IEData('aa', 10),
-      IEData('bb', 20),
+      IEData('收入', cal()[0]),
+      IEData('支出', cal()[1]),
     ];
     return chartData;
   }
