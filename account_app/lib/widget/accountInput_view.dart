@@ -87,11 +87,11 @@ class _AccountInputViewState extends State<AccountInputView> {
               //選擇收入和支出
               child:
               ToggleSwitch(
-                minWidth: 150.0,
-                minHeight: 70.0,
+                minWidth: 60.0.w,
+                minHeight: 10.0.h,
                 initialLabelIndex: choice_IncomePay,
                 totalSwitches: 2,
-                cornerRadius: 30.0,
+                cornerRadius: 60.0,
                 activeFgColor: Colors.white,
                 inactiveBgColor: Colors.grey,
                 inactiveFgColor: Colors.white,
@@ -105,7 +105,7 @@ class _AccountInputViewState extends State<AccountInputView> {
                     //(selectedValue);
                     //切換類別列表
                     toggleSwitch_labels = index;
-                    allStatus.add(toggleSwitch_labels);
+
                     if (index==0) {
                       confirm_IncomePay = incomeDropItems;
 
@@ -116,13 +116,11 @@ class _AccountInputViewState extends State<AccountInputView> {
                 },
               ),
             ),
-
             //輸入金額
             TextField(
                   decoration: TextFieldDecoration().textInputDecoration('\$\$','請輸入金額'),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    allStatus.add(value);
                     money = value;
                 },
               ),
@@ -149,7 +147,6 @@ class _AccountInputViewState extends State<AccountInputView> {
                           lastDate: DateTime(2025)
                       ).then((date) {
                         setState(() {
-                          allStatus.add(date);
                           _dateTime = date;
                         });
                       });
@@ -172,11 +169,11 @@ class _AccountInputViewState extends State<AccountInputView> {
                     ),
                     Expanded(
                       child: Text(
-                        '選擇類別',
+                        '  選擇類別',
                           style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: Colors.white,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -192,7 +189,7 @@ class _AccountInputViewState extends State<AccountInputView> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.brown,
+                        color: Colors.white,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -209,6 +206,37 @@ class _AccountInputViewState extends State<AccountInputView> {
                     //print(confirm_IncomePay.indexOf(selectedValue));
                   });
                 },
+              icon: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                ),
+                iconSize: 14.sp,
+                iconEnabledColor: Colors.yellow,
+                iconDisabledColor: Colors.grey,
+                buttonHeight: 10.h,
+                buttonWidth: 100.w,
+                //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(60),
+                  border: Border.all(
+                    color: Colors.black26,
+                  ),
+                  color: Color.fromARGB(0xFF, 181, 215, 212),
+                ),
+                buttonElevation: 2,
+                itemHeight: 40,
+                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                dropdownMaxHeight: 200,
+                dropdownWidth: 200,
+                dropdownPadding: null,
+                dropdownDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: Color.fromARGB(0xFF, 181, 215, 212),
+                ),
+                dropdownElevation: 60,
+                scrollbarRadius: const Radius.circular(40),
+                scrollbarThickness: 6,
+                scrollbarAlwaysShow: true,
+                offset: const Offset(-20, 0),
               ),
             Text(selectedValue == null ? '尚未選擇類型' : selectedValue.toString(),style: TextStyle(fontSize: 25.sp),),
             //儲存、取消按鈕
@@ -319,20 +347,14 @@ class _AccountInputViewState extends State<AccountInputView> {
     bool firstKeep =false;
 
 
-
     try{
-
       previousData= await prefs.getBillData();
       previousDataDecode = jsonDecode(previousData);
       //print(previousDataDecode);
-
     }catch(error){
-
       firstKeep = true;
       //print(previousDataDecode);
-
     }
-
 
 
     //如果取得資料為null代表使用者第一次存取
