@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-List list = ["日"," 一","二","三","四","五","六"];
+List list = [" 日 放假"," 一 上課","二 放假","三 上課","四 上課","五 上課","六 放假"];
 
 class SliverAppBarDemo extends StatelessWidget {
   @override
@@ -43,8 +43,7 @@ class SliverAppBarDemo extends StatelessWidget {
                     (BuildContext context, int index) {
                   return Container(
                     alignment: Alignment.center,
-                    child: Text('星期 ${list[index]}'),
-
+                    child: Text('星期${list[index]}'),
                   );
                 },
                 childCount: 7,
