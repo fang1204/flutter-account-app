@@ -1,8 +1,10 @@
+import 'dart:developer';
 
 import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/items_view.dart';
 import 'package:flutter/material.dart';
-
+import '../utils/shared_preference_util.dart';
+import 'accountInput_view.dart';
 import '../model/bill_data.dart';
 
 class ListItem extends StatefulWidget {
@@ -11,16 +13,34 @@ class ListItem extends StatefulWidget {
 }
 
 class _ListItemState extends State<ListItem> {
-  List<BillData> _bill = fakeData;
-  int p_sum = 0;
-  int n_sum = 0;
+
+  List<BillData> _previousDataDecode =[];
+  @override
+  void initState()  {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(_onLayoutDone);
+  }
+  _onLayoutDone(_)  async {
+
+    _previousDataDecode = await OutputVar();
+    log("$_previousDataDecode");
+    setState(() {
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+    // return Column();
+
 
     return ListView.builder(
 
       physics: BouncingScrollPhysics(),     //滾動
-      itemCount: _bill.length,                     //list長度
+      itemCount: _previousDataDecode.length,                     //list長度
+      // itemCount: 5,
       shrinkWrap: true,                     //只占據畫面上所需要的大小
       itemBuilder: (context,index){
 
@@ -33,7 +53,7 @@ class _ListItemState extends State<ListItem> {
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
               setState(() {
-                _bill.removeAt(index);
+                _previousDataDecode.removeAt(index);
               });
               // showSnakbar(context, 'Mail has beed deleted!');
             }
@@ -53,12 +73,13 @@ class _ListItemState extends State<ListItem> {
             color: Colors.red,
             child: Icon(Icons.delete, color: Colors.white),
           ),
-
-          child: BillItem(bill: _bill[index]),
+          child: BillItem(bill: _previousDataDecode[index]),
         );
 
       },
     );
+
+
   }
 }
 
