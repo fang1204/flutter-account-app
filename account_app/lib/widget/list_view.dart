@@ -49,7 +49,6 @@ class _ListItemState extends State<ListItem> {
 
 
     return ListView.builder(
-
       physics: BouncingScrollPhysics(),     //滾動
       itemCount: _totalData.length,                     //list長度
       // itemCount: 5,
