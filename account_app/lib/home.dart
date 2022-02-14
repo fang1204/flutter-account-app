@@ -238,8 +238,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromARGB(0xFF, 250, 175, 165),
         foregroundColor: Colors.white,
         onPressed: () {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context)=>AccountInputView()), (route) => false);
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context)=>AccountInputView()));
         },
         child: Icon(Icons.add),
 
