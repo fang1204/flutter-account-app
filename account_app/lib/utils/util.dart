@@ -1,6 +1,7 @@
 
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:account_app/utils/shared_preference_util.dart';
 
@@ -43,18 +44,20 @@ List cal(){
 }
 Future<List<BillData>> OutputVar() async {
   SharedPreferenceUtil prefs = SharedPreferenceUtil();
-  List<BillData> total_data = [];
-  String previousData;
-  List previousDataDecode;
-  bool firstKeep =false;
+  List<BillData> totalData = [];
+  String previousData="";
+  // String json = jsonEncode(previousDataDecode);
+  previousData = await prefs.getBillData();
+   log("previousData$previousData");
+  if (previousData.isNotEmpty){
+    List tmp = jsonDecode(previousData);
+    totalData = tmp.map((e) => BillData.fromJson(e)).toList();
+  }
+  print("************");
+  print(totalData);
 
-    previousData= await prefs.getBillData();
-    previousDataDecode = jsonDecode(previousData);
-     print(previousDataDecode);
-    for(String data in previousDataDecode){
-      total_data.add(BillData.fromJson(jsonDecode(data)));
-    }
-  return total_data;
+
+  return totalData;
 
   //如果取得資料為null代表使用者第一次存取
 
