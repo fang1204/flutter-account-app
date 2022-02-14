@@ -71,11 +71,11 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.equalizer_rounded),
-              title: Text('帳務報表'),
-              subtitle: Text('Account'),
+              title: Text('折線圖'),
+              subtitle: Text('Line chart'),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: (){
-                print("還沒做");
+              onTap: () {
+                Navigator.pushReplacementNamed(context, "/Line");
               },
             ),
             ListTile(
@@ -83,8 +83,8 @@ class _HomePageState extends State<HomePage> {
               title: Text('分類管理'),
               subtitle: Text('Classification'),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: (){
-                print("還沒做");
+              onTap: () {
+                showAlert(context);
               },
             ),
             ListTile(
@@ -98,11 +98,11 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.mail),
-              title: Text('聯絡資料'),
+              title: Text('行程'),
               subtitle: Text('Contact information'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: (){
-                showAlert(context);
+                Navigator.pushReplacementNamed(context, "/user");
               },
             ),
           ],
@@ -256,8 +256,7 @@ Future<void> showAlert(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Mail'),
-        content: const Text('. . . @gmail.com'),
+        title: Text('還在做'),
         actions: <Widget>[
           FlatButton(
             child: Text('確定'),
