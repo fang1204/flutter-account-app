@@ -44,7 +44,7 @@ class BillData{
     type = json['type'];
     date = json['date'];
     quantity = json['quantity'];
-    itemType = json['item_type'];
+    itemType = json['itemType'];
   }
 
   Map<String, dynamic> toJson() => {
