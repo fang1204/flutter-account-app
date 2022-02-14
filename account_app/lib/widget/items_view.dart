@@ -14,6 +14,7 @@ class BillItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
 
       leading: Container(     //清單中的分類
