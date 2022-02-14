@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../model/bill_data.dart';
@@ -14,7 +16,7 @@ class BillItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    log("****${bill.toJson()}");
     return ListTile(
 
       leading: Container(     //清單中的分類
