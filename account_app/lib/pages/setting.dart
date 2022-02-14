@@ -68,8 +68,42 @@ class SettingPage extends StatelessWidget {
               Navigator.pushReplacementNamed(context, "/about");
             },
           ),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text("聯絡資訊"),
+            subtitle: Text(' Contact Information'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(Icons.keyboard_arrow_right),
+              ],
+            ),
+            onTap: () {
+              showAlert(context);
+            },
+          ),
         ],
       ),
     );
   }
+}
+
+Future<void> showAlert(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Mail'),
+        content: const Text('. . . @gmail.com'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('確定'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -44,6 +44,7 @@ class SliverAppBarDemo extends StatelessWidget {
                   return Container(
                     alignment: Alignment.center,
                     child: Text('星期 ${list[index]}'),
+
                   );
                 },
                 childCount: 7,
