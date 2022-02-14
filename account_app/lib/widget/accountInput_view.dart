@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:account_app/home.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,16 +31,18 @@ class _AccountInputViewState extends State<AccountInputView> {
   DateTime ?_dateTime;
   //輸入金錢
   String money='';
-
   //選擇收入、支出狀態
   int choice_IncomePay = 0;
   //下拉式選單結果
   String ?selectedValue;
-
+  //下拉式選單index
+  int selectedValue_index=0;
   //收入支出
   int ?toggleSwitch_labels;
+  //都有填寫才可送出
+  bool isButtonAbled = false;
 
-  bool _selected = false;
+  List allStatus=[];
 
   //下拉式選單類別
   //收入
@@ -97,9 +102,10 @@ class _AccountInputViewState extends State<AccountInputView> {
                   print('switched to: $index');
                   choice_IncomePay = index!;
                   setState(() {
-                    print(selectedValue);
+                    //(selectedValue);
                     //切換類別列表
                     toggleSwitch_labels = index;
+                    allStatus.add(toggleSwitch_labels);
                     if (index==0) {
                       confirm_IncomePay = incomeDropItems;
 
@@ -114,7 +120,9 @@ class _AccountInputViewState extends State<AccountInputView> {
             //輸入金額
             TextField(
                   decoration: TextFieldDecoration().textInputDecoration('\$\$','請輸入金額'),
+                  keyboardType: TextInputType.number,
                   onChanged: (value) {
+                    allStatus.add(value);
                     money = value;
                 },
               ),
@@ -141,6 +149,7 @@ class _AccountInputViewState extends State<AccountInputView> {
                           lastDate: DateTime(2025)
                       ).then((date) {
                         setState(() {
+                          allStatus.add(date);
                           _dateTime = date;
                         });
                       });
@@ -192,7 +201,12 @@ class _AccountInputViewState extends State<AccountInputView> {
                   onChanged: (value) {
                   setState(() {
                     selectedValue = value as String;
-                    print(selectedValue);
+                    selectedValue_index = confirm_IncomePay.indexOf(selectedValue);
+
+                    allStatus.add(selectedValue_index);
+
+                    //print(selectedValue);
+                    //print(confirm_IncomePay.indexOf(selectedValue));
                   });
                 },
               ),
@@ -213,8 +227,25 @@ class _AccountInputViewState extends State<AccountInputView> {
                   ),
                   IconButton(
                       onPressed: (){
-                        _save();
-                        Navigator.pop(context);
+                        allStatus=  [];
+                        allStatus.add(money);
+                        allStatus.add(selectedValue);
+                        allStatus.add(_dateTime);
+                        allStatus.add(toggleSwitch_labels);
+
+                        CheckDoneAll();
+
+                        if(isButtonAbled){
+                          _save();
+                          Navigator.pop(context);
+                        }
+                        else{
+
+                          showAlert(context);
+
+                        }
+
+
                       },
                       icon: const Icon(Icons.done,color: Colors.green,)
                   ),
@@ -228,8 +259,37 @@ class _AccountInputViewState extends State<AccountInputView> {
 
   }
 
+   //確認是否全部都有填寫
+   CheckDoneAll(){
+     isButtonAbled = true;
+    for(int i=0;i<allStatus.length;i++){
+        if(allStatus[i]==null){
+          isButtonAbled = false;
+          return;
+        }
+    }
+  }
 
-
+  //沒有填寫則跳出警告
+  Future<void> showAlert(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('警告'),
+          content: const Text('請注意是否全都有選擇'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('確定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   //SharedPreferences存資料
   _save() async {
@@ -238,12 +298,95 @@ class _AccountInputViewState extends State<AccountInputView> {
     List a = [_dateTime,selectedValue,money,toggleSwitch_labels];
     print(a);
     */
-    SharedPreferenceUtil prefs = SharedPreferenceUtil();
 
-    prefs.saveBillData(_dateTime.toString());
-    prefs.saveBillData(selectedValue.toString());
-    prefs.saveBillData(money.toString());
-    prefs.saveBillData(toggleSwitch_labels.toString());
+
+    SharedPreferenceUtil prefs = SharedPreferenceUtil();
+    //先取得之前儲存資料並解碼加入List，接著再將新資料add進去List，最後在編碼存入
+
+    List total_data = [];
+
+    //存入資料
+    BillData perData =
+    BillData(
+        type: toggleSwitch_labels,
+        date: _dateTime.toString(),
+        itemType: selectedValue_index,
+        quantity:int.parse(money)
+    );
+
+    var previousData;
+    var previousDataDecode;
+    bool firstKeep =false;
+
+
+
+    try{
+
+      previousData= await prefs.getBillData();
+      previousDataDecode = jsonDecode(previousData);
+      //print(previousDataDecode);
+
+    }catch(error){
+
+      firstKeep = true;
+      //print(previousDataDecode);
+
+    }
+
+
+
+    //如果取得資料為null代表使用者第一次存取
+
+    if (firstKeep == true){
+      print("第一次儲存:$firstKeep");
+
+      total_data.add(perData);
+      var totalDataEoncode = jsonEncode(total_data);
+      prefs.saveBillData(totalDataEoncode);
+
+      print(await prefs.getBillData());
+
+    }
+
+    else{
+      print("非第一次儲存:$firstKeep");
+      //print(await previousDataDecode);
+
+      for(int i=0;i<previousDataDecode.length;i++){
+        total_data.add(previousDataDecode[i]);
+      }
+      total_data.add(perData);
+
+      var totalDataEoncode = jsonEncode(total_data);
+      prefs.saveBillData(totalDataEoncode);
+      print(await prefs.getBillData());
+
+    }
+
+    //print(previousDataDecode);
+    //total_data.add(previousDataDecode);
+    //print(total_data);
+
+
+/*
+    //存入資料
+    BillData perData =
+    BillData(
+        type: toggleSwitch_labels,
+        date: _dateTime.toString(),
+        itemType: selectedValue_index,
+        quantity:int.parse(money)
+    );
+
+    previousDataDecode.add(perData);
+
+    var totalDataEoncode = jsonEncode(previousDataDecode);
+    //print(totalDataEoncode);
+
+
+    prefs.saveBillData(totalDataEoncode);
+    print(await prefs.getBillData());
+*/
 
   }
 }
