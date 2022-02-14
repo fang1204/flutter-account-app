@@ -8,6 +8,7 @@ import 'package:account_app/pages/routes.dart';
 import 'package:account_app/pages/setting.dart';
 import 'package:account_app/pages/about.dart';
 import 'package:account_app/pages/User.dart';
+import 'package:account_app/pages/linechart.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           GitmeRebornRoutes.home: (context) => HomePage(),
           GitmeRebornRoutes.about: (context) => AboutPage(),
           GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
+          GitmeRebornRoutes.Line: (context) => LineChart(),
 
         },
         // home: HomePage(),
