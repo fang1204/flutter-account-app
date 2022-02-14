@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:account_app/home.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -71,7 +72,16 @@ class _AccountInputViewState extends State<AccountInputView> {
     '醫藥費',
   ];
   //點選後收入or支出要產生的下拉選單
-  List confirm_IncomePay=[];
+  //預設
+  List confirm_IncomePay=[
+    "薪資",
+    "打工",
+    "獎學金",
+    "投資",
+    "年終",
+    "發票",
+    "樂透",
+  ];
 
 
   @override
@@ -144,7 +154,7 @@ class _AccountInputViewState extends State<AccountInputView> {
                           context: context,
                           initialDate: _dateTime ?? DateTime.now(),
                           firstDate: DateTime(2001),
-                          lastDate: DateTime(2025)
+                          lastDate:  DateTime.now(),
                       ).then((date) {
                         setState(() {
                           _dateTime = date;
@@ -199,8 +209,6 @@ class _AccountInputViewState extends State<AccountInputView> {
                   setState(() {
                     selectedValue = value as String;
                     selectedValue_index = confirm_IncomePay.indexOf(selectedValue);
-
-                    allStatus.add(selectedValue_index);
 
                     //print(selectedValue);
                     //print(confirm_IncomePay.indexOf(selectedValue));
@@ -259,7 +267,8 @@ class _AccountInputViewState extends State<AccountInputView> {
                         allStatus.add(money);
                         allStatus.add(selectedValue);
                         allStatus.add(_dateTime);
-                        allStatus.add(toggleSwitch_labels);
+                        allStatus.add(choice_IncomePay);
+                        //print(choice_IncomePay);
 
                         CheckDoneAll();
 
@@ -322,31 +331,52 @@ class _AccountInputViewState extends State<AccountInputView> {
   //SharedPreferences存資料
   _save() async {
 
-    /*
-    List a = [_dateTime,selectedValue,money,toggleSwitch_labels];
-    print(a);
-    */
-
 
     SharedPreferenceUtil prefs = SharedPreferenceUtil();
-    //先取得之前儲存資料並解碼加入List，接著再將新資料add進去List，最後在編碼存入
 
-    List total_data = [];
-
-    //存入資料
+    //要存入的資料
     BillData perData =
     BillData(
-        type: toggleSwitch_labels,
+        type: choice_IncomePay,
         date: _dateTime.toString(),
         itemType: selectedValue_index,
         quantity:int.parse(money)
     );
 
+    List totalData = [];
+
+    //先前資料
+    String previousData = await prefs.getBillData();
+    //如果沒取到 代表還沒有存過 轉json存進去並編碼存入
+    if(previousData.isEmpty){
+      totalData.add(perData.toJson());
+      prefs.saveBillData(jsonEncode(totalData));
+    }
+    //有取到 先解碼再合併目前和現在的
+    else{
+      totalData = jsonDecode(previousData);
+      totalData.add(perData);
+      prefs.saveBillData(jsonEncode(totalData));
+    }
+
+    print(await prefs.getBillData());
+
+
+
+
+
+
+
+
+
+
+
+/*
     var previousData;
     var previousDataDecode;
-    bool firstKeep =false;
+    bool firstKeep =false;*/
 
-
+  /*
     try{
       previousData= await prefs.getBillData();
       previousDataDecode = jsonDecode(previousData);
@@ -371,7 +401,7 @@ class _AccountInputViewState extends State<AccountInputView> {
     }
 
     else{
-      print("非第一次儲存:$firstKeep");
+      print("第一次儲存:$firstKeep");
       //print(await previousDataDecode);
 
       for(int i=0;i<previousDataDecode.length;i++){
@@ -384,6 +414,7 @@ class _AccountInputViewState extends State<AccountInputView> {
       print(await prefs.getBillData());
 
     }
+    */
 
     //print(previousDataDecode);
     //total_data.add(previousDataDecode);
