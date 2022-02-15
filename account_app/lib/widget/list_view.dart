@@ -1,28 +1,25 @@
+// import 'dart:convert';
 import 'dart:developer';
 
+import 'package:account_app/data/home_account_list.dart';
+import 'package:account_app/model/account.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/items_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/shared_preference_util.dart';
 import 'accountInput_view.dart';
 import '../model/bill_data.dart';
 
 class ListItem extends StatefulWidget {
+
   @override
   _ListItemState createState() => _ListItemState();
 }
 
 class _ListItemState extends State<ListItem> {
   List<BillData> _totalData = [];
-  // Future<Null> getSharedPrefs() async {
-  //   SharedPreferenceUtil prefs = SharedPreferenceUtil();
-  //   _totalData = prefs.getBillData();
-  //   setState(() {
-  //     _controller = new TextEditingController(text: _name);
-  //   });
-  // }
-
 
   @override
   void initState()  {
@@ -32,10 +29,11 @@ class _ListItemState extends State<ListItem> {
 
   }
   _onLayoutDone(_)  async {
-    _totalData = await OutputVar();
 
-    log("$_totalData");
-    OutputVar();
+    _totalData =await HomeAccountList().OutputVar() ;
+
+    log("******$_totalData");
+    // _totalData();
     setState(() {
     });
   }
@@ -47,7 +45,9 @@ class _ListItemState extends State<ListItem> {
     // return Column();
 
 
-
+    // List<BillData> bill  = await HomeAccountList().OutputVar();
+    // print("============");
+    // print(bill);
     return ListView.builder(
       physics: BouncingScrollPhysics(),     //滾動
       itemCount: _totalData.length,                     //list長度
@@ -85,12 +85,15 @@ class _ListItemState extends State<ListItem> {
           ),
           child: BillItem(bill: _totalData[index]),
 
-        );
 
+        );
+        // _cal = cal(BillItem(bill: _totalData[index]));
       },
     );
 
 
   }
 }
+
+
 

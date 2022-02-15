@@ -16,7 +16,7 @@ class BillItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("****${bill.toJson()}");
+    // log("****${bill.toJson()}");
     return ListTile(
 
       leading: Container(     //清單中的分類

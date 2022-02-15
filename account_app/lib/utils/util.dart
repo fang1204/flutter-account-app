@@ -1,9 +1,9 @@
 
-
-import 'dart:convert';
 import 'dart:developer';
 
+import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/utils/shared_preference_util.dart';
+import 'package:account_app/widget/items_view.dart';
 
 import '../model/bill_data.dart';
 
@@ -26,51 +26,64 @@ List typeToList(int t, int typeName){
     return [s, p_n];
 }
 
-List cal(){
-  List<BillData> _bill = fakeData;
-  int p_sum = 0;
-  int n_sum = 0;
-  for (var value in _bill){
+// List cal(List p_n, int t,int quantity ){
+//
+//   if (t == 0){
+//       p_sum = p_sum + quantity!;
+//     }
+//   else  if (t == 1){
+//       n_sum = n_sum + quantity!;
+//     }
+//   return p_n;
+// }
 
-    if (value.type == 0){
+// List<BillData> bill=[];
+// Future<List> cal()  async {
+//
+//
+//   bill  = await HomeAccountList().OutputVar();
+//   int p_sum=0, n_sum=0;
+//   List p_n=[];
+//   for (var value in bill){
+//
+//     if (value.type == 0){
+//
+//       p_sum = p_sum + value.quantity!;
+//     }
+//     if (value.type == 1){
+//       n_sum = n_sum + value.quantity!;
+//     }
+//   }
+//   p_n.add(p_sum);
+//   p_n.add(n_sum);
+//
+//
+//   // previousData = bill;
+//
+//   return p_n;
+//
+// }
 
-      p_sum = p_sum + value.quantity!;
-    }
-    if (value.type == 1){
-      n_sum = n_sum + value.quantity!;
-    }
-  }
-  return [p_sum, n_sum];
-}
-Future<List<BillData>> OutputVar() async {
-  SharedPreferenceUtil prefs = SharedPreferenceUtil();
-  List<BillData> totalData = [];
-  String previousData="";
-  // String json = jsonEncode(previousDataDecode);
-  previousData = await prefs.getBillData();
-   log("previousData$previousData");
-  if (previousData.isNotEmpty){
-    List tmp = jsonDecode(previousData);
-    totalData = tmp.map((e) => BillData.fromJson(e)).toList();
-  }
-  print("************");
-  print(totalData);
-
-
-  return totalData;
-
-  //如果取得資料為null代表使用者第一次存取
-
-
-  print("************");
-  // print(ss.runtimeType);
-
-  // for (var value in ss){
-  //   print(ss);
-  // }
-
-
-
-}
-
+// Future<List<BillData>> OutputVar() async {
+//   SharedPreferenceUtil prefs = SharedPreferenceUtil();
+//   List<BillData> totalData = [];
+//   String previousData="";
+//   // String json = jsonEncode(previousDataDecode);
+//   previousData = await prefs.getBillData();
+//   log("previousData$previousData");
+//   if (previousData.isNotEmpty){
+//     List tmp = jsonDecode(previousData);
+//     totalData = tmp.map((e) => BillData.fromJson(e)).toList();
+//
+//   }
+//   print("************");
+//   print(totalData);
+//
+//
+//   return totalData;
+//
+//
+//   //如果取得資料為null代表使用者第一次存取
+//
+// }
 
