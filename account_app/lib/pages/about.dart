@@ -8,7 +8,7 @@ class AboutPage extends StatelessWidget {
   Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
     context:  context,
     builder: (context) =>AlertDialog(
-      title:Text("Do you want exit?"),
+      title:Text("Do you want to exit?"),
       actions: [
         ElevatedButton(
           child: Text('No'),
