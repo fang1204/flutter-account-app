@@ -9,6 +9,8 @@ import 'package:account_app/pages/setting.dart';
 import 'package:account_app/pages/about.dart';
 import 'package:account_app/pages/User.dart';
 import 'package:account_app/pages/linechart.dart';
+import 'package:account_app/note/note_page.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -33,12 +35,12 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          GitmeRebornRoutes.setting: (context) => SettingPage(),
-          GitmeRebornRoutes.home: (context) => HomePage(),
-          GitmeRebornRoutes.about: (context) => AboutPage(),
-          GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
-          GitmeRebornRoutes.Line: (context) => LineChart(),
-
+            GitmeRebornRoutes.setting: (context) => SettingPage(),
+            GitmeRebornRoutes.home: (context) => HomePage(),
+            GitmeRebornRoutes.about: (context) => AboutPage(),
+            GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
+            GitmeRebornRoutes.Line: (context) => LineChart(),
+            GitmeRebornRoutes.note: (context) => NotesPage(),
         },
         // home: HomePage(),
       ),
