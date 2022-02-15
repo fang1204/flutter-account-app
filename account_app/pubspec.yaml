@@ -45,6 +45,7 @@ dependencies:
   dropdown_button2: ^1.1.1
   syncfusion_flutter_charts: ^19.4.48
   shared_preferences: ^2.0.13
+  grouped_list: ^4.2.0
 
 
 

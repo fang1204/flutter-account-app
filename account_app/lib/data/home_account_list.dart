@@ -19,17 +19,18 @@ class HomeAccountList extends ChangeNotifier {
   int get p_sum => _p_sum;
   int get n_sum => _n_sum;
   List<IEData> chartData=[];
+  String previousData = "";
   void OutputVar() async {
 
-    String previousData = "";
+
     previousData = await prefs.getBillData();
 
     if (previousData.isNotEmpty) {
       List tmp = jsonDecode(previousData);
       _totalData = tmp.map((e) => BillData.fromJson(e)).toList();
     }
-    // log("previousData$previousData");
-    // log("totalData ${totalData.length}");
+    // log("previousData${previousData}");
+    // log("totalData ${_totalData}");
     cal();
     notifyListeners();
   }
@@ -59,6 +60,7 @@ class HomeAccountList extends ChangeNotifier {
     ];
     return _chartData;
   }
+
 
 /*
   List p_n = [0, 0];

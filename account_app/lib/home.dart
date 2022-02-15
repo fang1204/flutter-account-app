@@ -3,6 +3,7 @@ import 'package:account_app/model/account.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/accountInput_view.dart';
 import 'package:account_app/widget/card_view.dart';
+import 'package:account_app/widget/groupedlist_view.dart';
 
 import 'package:account_app/widget/list_view.dart';
 import 'package:account_app/widget/pieCharts_view.dart';
@@ -203,6 +204,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                           alignment: Alignment.topCenter,
                           padding: EdgeInsets.all(10),
+                          // child: ListItem(),
                           child: ListItem(),
                           /*
                   child: ListView.builder(                 //主頁面
