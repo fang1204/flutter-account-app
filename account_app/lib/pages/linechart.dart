@@ -5,12 +5,31 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 
 class LineChart extends StatelessWidget {
-  const LineChart({Key? key}) : super(key: key);
+  Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
+    context:  context,
+    builder: (context) =>AlertDialog(
+      title:Text("Do you want exit?"),
+      actions: [
+        ElevatedButton(
+          child: Text('No'),
+          onPressed: () =>Navigator.pop(context,false),
+        ),
+        ElevatedButton(
+          child: Text('Yes'),
+          onPressed: () =>Navigator.pop(context,true),
+        ),
+      ],
+    ),
+  );
 
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) =>WillPopScope(
+      onWillPop: ()async{
+        final  shouldPop = await showWarning(context);
+        return shouldPop ?? false;
+      },
+      child:Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
         leading: IconButton(
@@ -25,9 +44,9 @@ class LineChart extends StatelessWidget {
         title: Text('LineChart'),
       ),
       body: OutcomeChart(),
-    );
+    ),);
   }
-}
+
 
 class OutcomeChart extends StatefulWidget {
   @override

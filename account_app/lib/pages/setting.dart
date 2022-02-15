@@ -6,10 +6,31 @@ enum SearchTypes {
   users,
 }
 class SettingPage extends StatelessWidget {
+  Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
+    context:  context,
+    builder: (context) =>AlertDialog(
+      title:Text("Do you want exit?"),
+      actions: [
+        ElevatedButton(
+          child: Text('No'),
+          onPressed: () =>Navigator.pop(context,false),
+        ),
+        ElevatedButton(
+          child: Text('Yes'),
+          onPressed: () =>Navigator.pop(context,true),
+        ),
+      ],
+    ),
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) =>WillPopScope(
+      onWillPop: ()async{
+        final  shouldPop = await showWarning(context);
+        return shouldPop ?? false;
+      },
+
+      child:Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -82,9 +103,9 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),);
   }
-}
+
 
 Future<void> showAlert(BuildContext context) {
   return showDialog<void>(
