@@ -3,6 +3,7 @@ import 'package:account_app/model/account.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/accountInput_view.dart';
 import 'package:account_app/widget/card_view.dart';
+
 import 'package:account_app/widget/list_view.dart';
 import 'package:account_app/widget/pieCharts_view.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "支出\n"+"${cal()[1]}",
+                                      // "支出\n"+"${cal()[1]}",
+                                      "支出",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     // TextField(
@@ -174,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "收入\n"+"${cal()[0]}",
+                                      // "收入\n"+"${cal()[0]}",
+                                      "收入",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     // Text(
