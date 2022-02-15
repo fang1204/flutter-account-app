@@ -5,4 +5,5 @@ class GitmeRebornRoutes {
   static const about = "/about";
   static const user = "/user";
   static const Line = "/Line";
+  static const note = "/note";
 }
