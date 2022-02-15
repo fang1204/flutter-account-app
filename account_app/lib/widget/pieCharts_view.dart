@@ -14,8 +14,6 @@ import '../data/home_account_list.dart';
 import '../model/pie.dart';
 import '../utils/shared_preference_util.dart';
 
-
-
 class OutcomeChart extends StatefulWidget {
   @override
   _OutcomeChartState createState() => _OutcomeChartState();
