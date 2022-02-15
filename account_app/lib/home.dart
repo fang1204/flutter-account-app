@@ -80,15 +80,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.category_outlined),
-              title: Text('分類管理'),
-              subtitle: Text('Classification'),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {
-                showAlert(context);
-              },
-            ),
-            ListTile(
               leading: Icon(Icons.settings),
               title: Text('功能設定'),
               subtitle: Text('Settings'),
@@ -252,23 +243,4 @@ class _HomePageState extends State<HomePage> {
     );
 
   }
-}
-
-Future<void> showAlert(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('還在做'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('確定'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }
