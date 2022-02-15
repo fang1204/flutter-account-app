@@ -63,18 +63,15 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children:  <Widget>[
             UserAccountsDrawerHeader(
+              onDetailsPressed:() {
+                Navigator.pushReplacementNamed(context, "/user");
+              },
               decoration: BoxDecoration(
                 color: Color.fromARGB(0xFF, 181, 215, 212),
               ),
-              accountName: Text(
-                //姓名
-                "1",
-              ),
+              accountName: Text("1",style: TextStyle(color: Colors.black87,fontSize: 18),),
               //設定Email
-              accountEmail: Text(
-                //mail
-                "****@gmail.com",
-              ),
+              accountEmail: Text("****@gmail.com",style: TextStyle(color: Colors.black87,fontSize: 15),),
               //設定大頭照
               currentAccountPicture: CircleAvatar(
                 //照片
