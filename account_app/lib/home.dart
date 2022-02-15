@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               subtitle: Text('Contact information'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: (){
-                Navigator.pushReplacementNamed(context, "/user");
+                Navigator.pushReplacementNamed(context, "/note");
               },
             ),
           ],
