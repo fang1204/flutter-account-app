@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.mail),
-              title: Text('行程'),
-              subtitle: Text('Contact information'),
+              title: Text('備忘錄'),
+              subtitle: Text('Memorandum'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: (){
                 Navigator.pushReplacementNamed(context, "/note");
