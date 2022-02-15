@@ -8,7 +8,7 @@ import 'package:account_app/note/note_card_widget.dart';
 import 'package:flutter/services.dart';
 
 Future notepage() async {
-  WidgetsFlutterBinding.ensureInitialized();
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
