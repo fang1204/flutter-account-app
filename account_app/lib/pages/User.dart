@@ -1,5 +1,13 @@
 import "package:flutter/material.dart";
-List list = [" 日 放假"," 一 上課","二 放假","三 上課","四 上課","五 上課","六 放假"];
+List list = [
+  " 日 ",
+  " 一 ",
+  " 二 ",
+  " 三 ",
+  " 四 ",
+  " 五 ",
+  " 六 "
+];
 
 class SliverAppBarDemo extends StatelessWidget {
   @override
@@ -56,22 +64,3 @@ class SliverAppBarDemo extends StatelessWidget {
   }
 }
 
-Future<void> daata(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('資料'),
-        content: const Text('使用者: Lab \n 電話:0123456789 \n 信箱. . .@gmail.com'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('確定'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
