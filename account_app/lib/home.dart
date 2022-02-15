@@ -16,10 +16,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  HomeAccountList? homeAccountList;
   final title = '測試';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(_onLayoutDone);
+  }
+  _onLayoutDone(_){
+    homeAccountList!.OutputVar();
+
+  }
 
   @override
   Widget build(BuildContext context) {
+    homeAccountList = Provider.of<HomeAccountList>(context);
+
     return Scaffold(
       appBar: AppBar(
         //最上排
@@ -109,6 +123,7 @@ class _HomePageState extends State<HomePage> {
 
           Consumer<HomeAccountList>(
             builder: (context, data, child){
+              // data
               return Column(
                   children: [
                     Expanded(
@@ -121,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                               flex: 2,
                               child: Container(
                                 padding: EdgeInsets.only(right: 10, top: 10),
-                                color: Colors.black12,
+                                // color: Colors.black12,
                                 alignment: Alignment.topCenter,
                                 // child: Text(
                                 //   '收入',
@@ -130,8 +145,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      // "支出\n"+"${cal()[1]}",
-                                      "支出",
+                                      "支出\n"+"${data.n_sum}",
+                                      // "支出",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     // TextField(
@@ -158,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                               flex: 2,
                               child: Container(
                                 padding: EdgeInsets.only(right: 10, top: 10),
-                                color: Colors.black12,
+                                // color: Colors.black12,
                                 alignment: Alignment.topCenter,
                                 // child: Text(
                                 //   '收入',
@@ -167,8 +182,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      // "收入\n"+"${cal()[0]}",
-                                      "收入",
+                                      "收入\n"+"${data.p_sum}",
+                                      // "收入",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     // Text(
@@ -233,7 +248,8 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Colors.white,
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context)=>AccountInputView()));
+              MaterialPageRoute(
+                  builder: (context)=>AccountInputView())).then((value) => homeAccountList!.OutputVar());
         },
         child: Icon(Icons.add),
 
