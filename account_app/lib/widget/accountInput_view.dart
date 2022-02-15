@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:account_app/home.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -83,217 +83,239 @@ class _AccountInputViewState extends State<AccountInputView> {
     "樂透",
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Column(
+          crossAxisAlignment:CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 30, 10, 20),
-              //選擇收入和支出
-              child:
-              ToggleSwitch(
-                minWidth: 60.0.w,
-                minHeight: 10.0.h,
-                initialLabelIndex: choice_IncomePay,
-                totalSwitches: 2,
-                cornerRadius: 60.0,
-                activeFgColor: Colors.white,
-                inactiveBgColor: Colors.grey,
-                inactiveFgColor: Colors.white,
-                activeBgColors: const[[Colors.blue],[Colors.pink]],
-                labels: const["收入","支出"],
+            Expanded(
+              flex: 1,
+                child:Container(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  child: ToggleSwitch(
+                    initialLabelIndex: choice_IncomePay,
+                    totalSwitches: 2,
+                    cornerRadius: 30.0,
+                    activeFgColor: Colors.white,
+                    inactiveBgColor: Colors.grey,
+                    inactiveFgColor: Colors.white,
+                    activeBgColors: const [[Color.fromRGBO(51, 102, 153, 1)],[Color.fromRGBO(153, 51, 51, 1)]],
+                    labels: const["收入","支出"],
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      choice_IncomePay = index!;
+                      setState(() {
+                        //(selectedValue);
+                        //切換類別列表
+                        toggleSwitch_labels = index;
+                        if (index==0) {
+                          confirm_IncomePay = incomeDropItems;
+                        } else {
+                          confirm_IncomePay = payDropItems;
+                        }
+                        //重新設置下拉選單的select value
+                        selectedValue = null;
 
-                onToggle: (index) {
-                  print('switched to: $index');
-                  choice_IncomePay = index!;
-                  setState(() {
-                    //(selectedValue);
-                    //切換類別列表
-                    toggleSwitch_labels = index;
-
-                    if (index==0) {
-                      confirm_IncomePay = incomeDropItems;
-
-                    } else {
-                      confirm_IncomePay = payDropItems;
-                    }
-                  });
-                },
-              ),
-            ),
-            //輸入金額
-            TextField(
-                  decoration: TextFieldDecoration().textInputDecoration('\$\$','請輸入金額'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    money = value;
-                },
-              ),
-
-            //選擇日期
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              child:Row(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                  Text(_dateTime == null ? '尚未選擇日期' : _dateTime.toString().substring(0,11),
-                      style: TextStyle(fontSize: 20.sp,color: Colors.blueGrey)),
-                  ElevatedButton(
-                    child: const Text(
-                      '日期選擇',
-                      style: TextStyle(fontSize: 20.0, color: Colors.white),
-                    ),
-                    onPressed: (){
-                      showDatePicker(
-                          context: context,
-                          initialDate: _dateTime ?? DateTime.now(),
-                          firstDate: DateTime(2001),
-                          lastDate:  DateTime.now(),
-                      ).then((date) {
-                        setState(() {
-                          _dateTime = date;
-                        });
                       });
                     },
                   ),
-                ],
-              )
+                ),
+
+            ),
+            Expanded(
+              flex: 1,
+                child: //輸入金額
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    decoration: TextFieldDecoration().textInputDecoration('\$\$','請輸入金額',choice_IncomePay),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      money = value;
+                    },
+                  ),
+                ),
+            ),
+            Expanded(
+              flex: 1,
+                child:
+                Container(
+                  alignment: AlignmentDirectional.centerStart,
+                  padding: const EdgeInsets.all(10),
+                  child: //下拉選單
+                  DropdownButton2(
+                    isExpanded: true,
+                    hint: Row(
+                      children: const [
+                        Icon(Icons.list,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        Expanded(
+                          child: Text(
+                            '選擇類別',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: selectedValue,
+                    items:
+                    confirm_IncomePay.map((item) =>
+                        DropdownMenuItem<String>(
+                          value: item,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              item,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize:18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValue = value as String;
+                        selectedValue_index = confirm_IncomePay.indexOf(selectedValue);
+                        //print(selectedValue);
+                        //print(confirm_IncomePay.indexOf(selectedValue));
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios_outlined,
+                    ),
+                    iconSize: 20.sp,
+                    iconEnabledColor: Colors.white,
+                    //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                    buttonDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.black26,
+                      ),
+                      color:ChangeColor(choice_IncomePay),
+                    ),
+                    itemPadding: const EdgeInsets.only(left: 50, right: 50),
+                    dropdownPadding: null,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: ChangeColor(choice_IncomePay),
+                    ),
+                    scrollbarRadius: const Radius.circular(30),
+                    scrollbarThickness: 10,
+
+                  ),
+                ),
 
             ),
 
-            //下拉選單
-            DropdownButton2(
-                isExpanded: true,
-                hint: Row(
-                  children: const [
-                    Icon(
-                      Icons.list,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                    Expanded(
-                      child: Text(
-                        '  選擇類別',
-                          style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+            /*
+            Text(selectedValue == null ? '尚未選擇類型' : selectedValue.toString(),
+              style: TextStyle(fontSize: 24.sp,color: ChangeColor(choice_IncomePay)),),*/
+            Expanded(
+              flex: 1,
+                child: //選擇日期
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    /*
+                    Text(_dateTime == null ? '尚未選擇日期' : _dateTime.toString().substring(0,11),
+                        style: TextStyle(fontSize: 20.sp,color: ChangeColor(choice_IncomePay))),*/
+                    Container(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary : ChangeColor(choice_IncomePay)),
+                        child: Text(
+                          _dateTime == null ? '尚未選擇日期' : _dateTime.toString().substring(0,11),
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
                         ),
-                        overflow: TextOverflow.ellipsis,
+                        onPressed: (){
+                          showDatePicker(
+                            context: context,
+                            initialDate: _dateTime ?? DateTime.now(),
+                            firstDate: DateTime(2001),
+                            lastDate:  DateTime.now(),
+                          ).then((date) {
+                            setState(() {
+                              _dateTime = date;
+                            });
+                          });
+                        },
                       ),
                     ),
                   ],
                 ),
-                items:
-                confirm_IncomePay.map((item) =>
-                    DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )).toList(),
-
-                  onChanged: (value) {
-                  setState(() {
-                    selectedValue = value as String;
-                    selectedValue_index = confirm_IncomePay.indexOf(selectedValue);
-
-                    //print(selectedValue);
-                    //print(confirm_IncomePay.indexOf(selectedValue));
-                  });
-                },
-              icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 14.sp,
-                iconEnabledColor: Colors.yellow,
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 10.h,
-                buttonWidth: 100.w,
-                //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(60),
-                  border: Border.all(
-                    color: Colors.black26,
-                  ),
-                  color: Color.fromARGB(0xFF, 181, 215, 212),
-                ),
-                buttonElevation: 2,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Color.fromARGB(0xFF, 181, 215, 212),
-                ),
-                dropdownElevation: 60,
-                scrollbarRadius: const Radius.circular(40),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
-            Text(selectedValue == null ? '尚未選擇類型' : selectedValue.toString(),style: TextStyle(fontSize: 25.sp),),
-            //儲存、取消按鈕
-            Container(
-              height: 20.h,
-              width: 60.w,
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close,color: Colors.red,)
-                  ),
-                  IconButton(
-                      onPressed: (){
-                        allStatus=  [];
-                        allStatus.add(money);
-                        allStatus.add(selectedValue);
-                        allStatus.add(_dateTime);
-                        allStatus.add(choice_IncomePay);
-                        //print(choice_IncomePay);
-
-                        CheckDoneAll();
-
-                        if(isButtonAbled){
-                          _save();
-                          Navigator.pop(context);
-                        }
-                        else{
-
-                          showAlert(context);
-
-                        }
-
-
-                      },
-                      icon: const Icon(Icons.done,color: Colors.green,)
-                  ),
-                ],
-              ),
             ),
+            Expanded(
+                flex:5,
+                child: Container()
+            ),
+            Expanded(
+              flex: 1,
+              child: //儲存、取消按鈕
+                Container(
+                  height: 20.h,
+                  width: 60.w,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.close,color: Colors.red,)
+                      ),
+                      IconButton(
+                          onPressed: (){
+                            allStatus=  [];
+                            allStatus.add(money);
+                            allStatus.add(selectedValue);
+                            allStatus.add(_dateTime);
+                            allStatus.add(choice_IncomePay);
+                            //print(choice_IncomePay);
+                            CheckDoneAll();
+                            if(isButtonAbled){
+                              _save();
+                              Navigator.pop(context);
+                            }
+                            else{
+                              showAlert(context);
+                            }
+                          },
+                          icon: const Icon(Icons.done,color: Colors.green,)
+                      ),
+                    ],
+                  ),
+                ),
+            ),
+
           ],
         ),
       ),
     );
+  }
 
+  //變換顏色
+  ChangeColor(int choice_IncomePay){
+    if(choice_IncomePay==0){
+      return Color.fromRGBO(51, 102, 153, 1);
+    }
+    else{
+      return Color.fromRGBO(153, 51, 51, 1);
+    }
   }
 
    //確認是否全部都有填寫
@@ -360,16 +382,6 @@ class _AccountInputViewState extends State<AccountInputView> {
     }
 
     print(await prefs.getBillData());
-
-
-
-
-
-
-
-
-
-
 
 /*
     var previousData;
@@ -443,3 +455,4 @@ class _AccountInputViewState extends State<AccountInputView> {
 
   }
 }
+
