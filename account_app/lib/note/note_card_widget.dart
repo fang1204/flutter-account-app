@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:account_app/note/note.dart';
 
 final _lightColors = [
-  Colors.amber.shade300,
+  Colors.amber.shade100,
   Colors.pinkAccent.shade100,
   Colors.tealAccent.shade100
 ];
