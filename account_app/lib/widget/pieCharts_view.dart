@@ -20,7 +20,6 @@ class OutcomeChart extends StatefulWidget {
   @override
   _OutcomeChartState createState() => _OutcomeChartState();
 }
-
 class _OutcomeChartState extends State<OutcomeChart> {
   @override
   Widget build(BuildContext context) {

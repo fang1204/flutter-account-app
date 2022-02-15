@@ -25,7 +25,6 @@ class _ListItemState extends State<ListItem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<HomeAccountList>(
         builder: (context, data, child){
           log("test ${data.totalData}");
