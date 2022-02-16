@@ -17,11 +17,28 @@ Future notepage() async {
 }
 
 class NotesPage extends StatefulWidget {
+
   @override
   _NotesPageState createState() => _NotesPageState();
 }
 
 class _NotesPageState extends State<NotesPage> {
+  Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
+    context:  context,
+    builder: (context) =>AlertDialog(
+      title:Text("Do you want to exit?"),
+      actions: [
+        ElevatedButton(
+          child: Text('No'),
+          onPressed: () =>Navigator.pop(context,false),
+        ),
+        ElevatedButton(
+          child: Text('Yes'),
+          onPressed: () =>Navigator.pop(context,true),
+        ),
+      ],
+    ),
+  );
   late List<Note> notes;
   bool isLoading = false;
 
@@ -48,8 +65,12 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-
+  Widget build(BuildContext context) =>WillPopScope(
+    onWillPop: ()async{
+      final  shouldPop = await showWarning(context);
+      return shouldPop ?? false;
+    },
+      child:Scaffold(
     appBar: AppBar(
       backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
       title: Text(
@@ -87,7 +108,7 @@ class _NotesPageState extends State<NotesPage> {
         refreshNotes();
       },
     ),
-  );
+  ),);
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
     padding: EdgeInsets.all(8),

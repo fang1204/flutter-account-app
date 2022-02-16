@@ -5,12 +5,31 @@ enum SearchTypes {
   users,
 }
 class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key}) : super(key: key);
-
+  Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
+    context:  context,
+    builder: (context) =>AlertDialog(
+      title:Text("Do you want to exit?"),
+      actions: [
+        ElevatedButton(
+          child: Text('No'),
+          onPressed: () =>Navigator.pop(context,false),
+        ),
+        ElevatedButton(
+          child: Text('Yes'),
+          onPressed: () =>Navigator.pop(context,true),
+        ),
+      ],
+    ),
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) =>WillPopScope(
+    onWillPop: ()async{
+      final  shouldPop = await showWarning(context);
+      return shouldPop ?? false;
+    },
+
+      child:Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
         leading: IconButton(
@@ -25,9 +44,9 @@ class AboutPage extends StatelessWidget {
         title: Text('About me'),
       ),
       body: aboutme(),
-    );
+    ),);
   }
-}
+
 
 class aboutme extends StatelessWidget {
   @override
