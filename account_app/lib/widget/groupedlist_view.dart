@@ -65,7 +65,7 @@ class _GroupedListState extends State<GroupedList> {
                   child: ListTile(
                     contentPadding:
                     EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: Icon(Icons.accessibility),
+                    leading: Icon(typeToList(item['type'],item['itemType'])[2]),
                     title: Text(typeToList(item['type'],item['itemType'])[0]),
                     trailing: Text(
                       "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",

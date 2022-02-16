@@ -55,7 +55,8 @@ class SettingPage extends StatelessWidget {
               Wrap(
                 spacing: 8.0,
                 children: <Widget>[
-                  ThemeOption(color: Colors.lightBlueAccent),
+                  ThemeOption(color: Color.fromARGB(0xFF, 250, 175, 165)),
+                  // Color.fromARGB(0xFF, 250, 175, 165)
                 ],
               )
             ],
