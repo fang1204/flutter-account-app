@@ -40,6 +40,15 @@ class HomeAccountList extends ChangeNotifier {
     notifyListeners();
   }
 
+  void decreaseQty(var item) {
+    _tmp.remove(item);
+
+    notifyListeners();
+    // Future.delayed(Duration(milliseconds: 10), () {
+    //   notifyListeners();
+    // });
+  }
+
 
   // List<BillData> get chartData => ;
 

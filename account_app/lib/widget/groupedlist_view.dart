@@ -23,7 +23,7 @@ class _GroupedListState extends State<GroupedList> {
     return Consumer<HomeAccountList>(
         builder: (context, data, child){
 
-          log("test ${data.tmp}");
+          log("test");
 
           return GroupedListView<dynamic, String>(
 
@@ -58,74 +58,52 @@ class _GroupedListState extends State<GroupedList> {
             ),
 
             itemBuilder: (context, item) {
-              return Card(
-                elevation: 8.0,
-                margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                child: Container(
-                  child: ListTile(
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: Icon(typeToList(item['type'],item['itemType'])[2]),
-                    title: Text(typeToList(item['type'],item['itemType'])[0]),
-                    trailing: Text(
-                      "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
-                      // maxLines: 2,
+              return Dismissible(
+
+                key: UniqueKey(),               //StatefulWidget需要定義給他的
+                direction: DismissDirection.endToStart,     //方向
+                onDismissed: (direction) {
+                  if (direction == DismissDirection.endToStart) {
+                    data.decreaseQty(item);
+                    log("_tmp  ${data.tmp}");
+                    // setState(() {
+                    //   item.removeAt();
+                    // });
+                    // showSnakbar(context, 'Mail has beed deleted!');
+                  }
+
+                },
+                background: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 20.0),
+                  color: Colors.blue,
+                  child: Icon(Icons.archive_outlined, color: Colors.white),
+                ),
+                secondaryBackground: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.red,
+                  child: Icon(Icons.delete, color: Colors.white),
+                ),
+                child: Card(
+                  elevation: 8.0,
+                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                  child: Container(
+                    child: ListTile(
+                      contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      leading: Icon(typeToList(item['type'],item['itemType'])[2]),
+                      title: Text(typeToList(item['type'],item['itemType'])[0]),
+                      trailing: Text(
+                        "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
+                        // maxLines: 2,
+                      ),
                     ),
                   ),
                 ),
               );
-              // return Card(
-              //   elevation: 8.0,
-              //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              //   child: Container(padding: EdgeInsets.all(8),
-              //     child: ListView.builder(
-              //       physics: BouncingScrollPhysics(),
-              //       itemCount: data.totalData.length,
-              //       shrinkWrap: true,
-              //       itemBuilder: (context, index) {
-              //
-              //         // for (var value in mails) {
-              //         //   print(value.time);
-              //         // }
-              //         return Dismissible(
-              //           key: UniqueKey(),
-              //           direction: DismissDirection.horizontal,
-              //           onDismissed: (direction) {
-              //             if (direction == DismissDirection.endToStart) {
-              //               setState(() {
-              //                 data.totalData.removeAt(index);
-              //               });
-              //               Navigator.of(context).pop(true);
-              //               // showSnakbar(context, 'Mail has beed deleted!');
-              //             }
-              //             // else{
-              //             //   setState(){
-              //             //
-              //             //   }
-              //             // }
-              //             // else if (direction == DismissDirection.startToEnd) {
-              //             //   showSnakbar(context, 'Mail has beed Archived!');
-              //             // }
-              //           },
-              //           background: Container(
-              //             alignment: Alignment.centerLeft,
-              //             padding: EdgeInsets.only(left: 20.0),
-              //             color: Colors.blue,
-              //             child: Icon(Icons.archive_outlined, color: Colors.white),
-              //           ),
-              //           secondaryBackground: Container(
-              //             alignment: Alignment.centerRight,
-              //             padding: EdgeInsets.only(right: 20.0),
-              //             color: Colors.redAccent,
-              //             child: Icon(Icons.delete, color: Colors.white),
-              //           ),
-              //           child: BillItem(bill: data.totalData[index]),
-              //
-              //         );
-              //       },
-              //     ),
-              //   ),
-              // );
+
+
             },
             groupComparator: (group1, group2) => group1.compareTo(group2),
             itemComparator: (item1, item2) =>
