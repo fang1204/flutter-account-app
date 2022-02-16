@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   }
   _onLayoutDone(_){
     homeAccountList!.OutputVar();
-
   }
 
   @override
@@ -143,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "支出\n"+"${data.n_sum}",
+                                      "支出\n"+"${data.p_n[1]}",
                                       // "支出",
                                       style: TextStyle(fontSize: 20),
                                     ),
@@ -180,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "收入\n"+"${data.p_sum}",
+                                      "收入\n"+"${data.p_n[0]}",
                                       // "收入",
                                       style: TextStyle(fontSize: 20),
                                     ),
