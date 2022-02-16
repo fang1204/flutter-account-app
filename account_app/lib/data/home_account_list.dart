@@ -28,21 +28,20 @@ class HomeAccountList extends ChangeNotifier {
 
     if (previousData.isNotEmpty) {
       _tmp = jsonDecode(previousData);
-      _totalData = tmp.map((e) => BillData.fromJson(e)).toList();
+      _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
     }
     _p_n = cal();
     _chartData = getChartData(_p_n[0],_p_n[1]);
-    // log("previousData${previousData}");
-    // log("totalData ${_totalData}");
 
-
-    // cal();
     notifyListeners();
   }
 
   void decreaseQty(var item) {
     _tmp.remove(item);
-
+    _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
+    log("_totalData  ${_totalData}");
+    _p_n = cal();
+    _chartData = getChartData(_p_n[0],_p_n[1]);
     notifyListeners();
     // Future.delayed(Duration(milliseconds: 10), () {
     //   notifyListeners();
@@ -57,7 +56,7 @@ class HomeAccountList extends ChangeNotifier {
     int p_sum = 0;
     int n_sum = 0;
 
-    for (var t in totalData) {
+    for (var t in _totalData) {
       if (t.type == 0) {
         p_sum = p_sum + t.quantity!;
       } else if (t.type == 1) {
@@ -81,32 +80,5 @@ class HomeAccountList extends ChangeNotifier {
   }
 
 
-/*
-  List p_n = [0, 0];
-  List<BillData> _totalData = [];
-
-  @override
-
-
-
-
-    _totalData =await HomeAccountList().OutputVar() ;
-
-    log("******$_totalData");
-    for(var t in _totalData){
-      if (t.type == 0){
-        p_sum = p_sum + t.quantity!;
-      }
-      else  if (t.type == 1){
-        n_sum = n_sum + t.quantity!;
-      }
-    }
-    p_n[0] = p_sum;
-    p_n[1] = n_sum;
-
-    setState(() {
-      _chartData = getChartData();
-    });
-  }*/
 
 }
