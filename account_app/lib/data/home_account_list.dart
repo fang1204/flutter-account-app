@@ -38,6 +38,8 @@ class HomeAccountList extends ChangeNotifier {
 
   void decreaseQty(var item) {
     _tmp.remove(item);
+    prefs.saveBillData(jsonEncode(_tmp));
+
     _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
     log("_totalData  ${_totalData}");
     _p_n = cal();
