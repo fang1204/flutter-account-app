@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                           alignment: Alignment.topCenter,
                           padding: EdgeInsets.all(10),
                           // child: ListItem(),
-                          child: ListItem(),
+                          child: GroupedList(),
                           /*
                   child: ListView.builder(                 //主頁面
 

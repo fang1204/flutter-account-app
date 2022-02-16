@@ -18,15 +18,16 @@ class HomeAccountList extends ChangeNotifier {
 
   List<IEData> _chartData=[];
   List<IEData> get chartData => _chartData;
-  List _p_n = [];
+  List _p_n = [0,0];
   List get p_n => _p_n;
+  List _tmp=[];
+  List get tmp => _tmp;
   String previousData = "";
   void OutputVar() async {
-
     previousData = await prefs.getBillData();
 
     if (previousData.isNotEmpty) {
-      List tmp = jsonDecode(previousData);
+      _tmp = jsonDecode(previousData);
       _totalData = tmp.map((e) => BillData.fromJson(e)).toList();
     }
     _p_n = cal();

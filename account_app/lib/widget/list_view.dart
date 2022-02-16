@@ -25,16 +25,18 @@ class _ListItemState extends State<ListItem> {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<HomeAccountList>(
         builder: (context, data, child){
           log("test ${data.totalData}");
+          // log("test_  ${data.tmp}");
           return ListView.builder(
             physics: BouncingScrollPhysics(),     //滾動
             itemCount: data.totalData.length,                     //list長度
             // itemCount: 5,
             shrinkWrap: true,                     //只占據畫面上所需要的大小
             itemBuilder: (context,index){
-              log("ListItem ${data.totalData.length}");
+              // log("ListItem ${data.totalData.length}");
               return Dismissible(
 
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:account_app/model/bill_data.dart';
+import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/items_view.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -21,19 +22,14 @@ class _GroupedListState extends State<GroupedList> {
   Widget build(BuildContext context) {
     return Consumer<HomeAccountList>(
         builder: (context, data, child){
-          List _data = [];
-          if (data.previousData.isNotEmpty) {
-            _data = jsonDecode(data.previousData);
-            // _data = tmp.map((e) => fromJson(e)).toList();
 
-          }
-          log("test ${_data}");
+          log("test ${data.tmp}");
 
           return GroupedListView<dynamic, String>(
 
-            elements: _data,
+            elements: data.tmp,
 
-            groupBy: (_data) => _data['date'],
+            groupBy: (item) => item['date'].split(" ")[0],
             groupSeparatorBuilder: (groupValue) => Padding(
               padding: EdgeInsets.all(8),
               child: Row(
@@ -62,63 +58,78 @@ class _GroupedListState extends State<GroupedList> {
             ),
 
             itemBuilder: (context, item) {
-
               return Card(
                 elevation: 8.0,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Container(padding: EdgeInsets.all(8),
-                  child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: data.totalData.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-
-                      // for (var value in mails) {
-                      //   print(value.time);
-                      // }
-                      return Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.horizontal,
-                        onDismissed: (direction) {
-                          if (direction == DismissDirection.endToStart) {
-                            setState(() {
-                              data.totalData.removeAt(index);
-                            });
-                            Navigator.of(context).pop(true);
-                            // showSnakbar(context, 'Mail has beed deleted!');
-                          }
-                          // else{
-                          //   setState(){
-                          //
-                          //   }
-                          // }
-                          // else if (direction == DismissDirection.startToEnd) {
-                          //   showSnakbar(context, 'Mail has beed Archived!');
-                          // }
-                        },
-                        background: Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 20.0),
-                          color: Colors.blue,
-                          child: Icon(Icons.archive_outlined, color: Colors.white),
-                        ),
-                        secondaryBackground: Container(
-                          alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(right: 20.0),
-                          color: Colors.redAccent,
-                          child: Icon(Icons.delete, color: Colors.white),
-                        ),
-                        child: BillItem(bill: data.totalData[index]),
-
-                      );
-                    },
+                margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                child: Container(
+                  child: ListTile(
+                    contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    leading: Icon(Icons.accessibility),
+                    title: Text(typeToList(item['type'],item['itemType'])[0]),
+                    trailing: Text(
+                      "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
+                      // maxLines: 2,
+                    ),
                   ),
                 ),
               );
+              // return Card(
+              //   elevation: 8.0,
+              //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              //   child: Container(padding: EdgeInsets.all(8),
+              //     child: ListView.builder(
+              //       physics: BouncingScrollPhysics(),
+              //       itemCount: data.totalData.length,
+              //       shrinkWrap: true,
+              //       itemBuilder: (context, index) {
+              //
+              //         // for (var value in mails) {
+              //         //   print(value.time);
+              //         // }
+              //         return Dismissible(
+              //           key: UniqueKey(),
+              //           direction: DismissDirection.horizontal,
+              //           onDismissed: (direction) {
+              //             if (direction == DismissDirection.endToStart) {
+              //               setState(() {
+              //                 data.totalData.removeAt(index);
+              //               });
+              //               Navigator.of(context).pop(true);
+              //               // showSnakbar(context, 'Mail has beed deleted!');
+              //             }
+              //             // else{
+              //             //   setState(){
+              //             //
+              //             //   }
+              //             // }
+              //             // else if (direction == DismissDirection.startToEnd) {
+              //             //   showSnakbar(context, 'Mail has beed Archived!');
+              //             // }
+              //           },
+              //           background: Container(
+              //             alignment: Alignment.centerLeft,
+              //             padding: EdgeInsets.only(left: 20.0),
+              //             color: Colors.blue,
+              //             child: Icon(Icons.archive_outlined, color: Colors.white),
+              //           ),
+              //           secondaryBackground: Container(
+              //             alignment: Alignment.centerRight,
+              //             padding: EdgeInsets.only(right: 20.0),
+              //             color: Colors.redAccent,
+              //             child: Icon(Icons.delete, color: Colors.white),
+              //           ),
+              //           child: BillItem(bill: data.totalData[index]),
+              //
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // );
             },
             groupComparator: (group1, group2) => group1.compareTo(group2),
             itemComparator: (item1, item2) =>
-                item1['title'].compareTo(item2['title']),
+                item1['date'].compareTo(item2['date']),
             floatingHeader: false,
             order: GroupedListOrder.ASC,
           );
@@ -126,4 +137,5 @@ class _GroupedListState extends State<GroupedList> {
     );
 
   }
+
 }
