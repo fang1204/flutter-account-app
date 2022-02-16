@@ -23,7 +23,7 @@ class _OutcomeChartState extends State<OutcomeChart> {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeAccountList>(builder: (context, data, child) {
-      log("chartData  ${data.chartData}");
+      log("OutcomeChart chartData  ${data.chartData}");
       return SafeArea(
           child: Scaffold(
         body: SfCircularChart(
@@ -31,8 +31,10 @@ class _OutcomeChartState extends State<OutcomeChart> {
           legend: Legend(
               isVisible: true,
               overflowMode: LegendItemOverflowMode.wrap,
+              toggleSeriesVisibility: false,
               //         legendShape: BoxShape.circle,
               position: LegendPosition.bottom),
+
           tooltipBehavior: TooltipBehavior(enable: true),
           series: <CircularSeries>[
             DoughnutSeries<IEData, String>(

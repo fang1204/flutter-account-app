@@ -14,14 +14,14 @@ class HomeAccountList extends ChangeNotifier {
   SharedPreferenceUtil prefs = SharedPreferenceUtil();
   List<BillData> _totalData = [];
   List<BillData> get totalData => _totalData;
-  int _p_sum = 0;
-  int _n_sum = 0;
-  int get p_sum => _p_sum;
-  int get n_sum => _n_sum;
-  List<IEData> chartData=[];
+
+
+  List<IEData> _chartData=[];
+  List<IEData> get chartData => _chartData;
+  List _p_n = [];
+  List get p_n => _p_n;
   String previousData = "";
   void OutputVar() async {
-
 
     previousData = await prefs.getBillData();
 
@@ -29,30 +29,39 @@ class HomeAccountList extends ChangeNotifier {
       List tmp = jsonDecode(previousData);
       _totalData = tmp.map((e) => BillData.fromJson(e)).toList();
     }
+    _p_n = cal();
+    _chartData = getChartData(_p_n[0],_p_n[1]);
     // log("previousData${previousData}");
     // log("totalData ${_totalData}");
-    cal();
+
+
+    // cal();
     notifyListeners();
   }
 
 
   // List<BillData> get chartData => ;
 
-  void cal() {
+  List cal() {
+
+    int p_sum = 0;
+    int n_sum = 0;
+
     for (var t in totalData) {
       if (t.type == 0) {
-        _p_sum = p_sum + t.quantity!;
+        p_sum = p_sum + t.quantity!;
       } else if (t.type == 1) {
-        _n_sum = n_sum + t.quantity!;
+        n_sum = n_sum + t.quantity!;
       }
     }
-    chartData = getChartData(_p_sum,_n_sum);
+
 
     // log("chartData ${chartData}");
-    // notifyListeners();
+    return [p_sum, n_sum];
   }
 
-  List<IEData> getChartData(p_sum,n_sum){
+
+  List<IEData> getChartData(int p_sum,int n_sum){
 
     final List<IEData> _chartData = [
       IEData('收入', p_sum),
