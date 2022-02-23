@@ -13,8 +13,8 @@ class TextFieldDecoration{
       fillColor: Colors.white,
       filled: true,
       //點選輸入時顏色變換
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0),borderSide: BorderSide(color: ColoerPicker(choice_IncomePay)[0])),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0),borderSide: BorderSide(color: ColoerPicker(choice_IncomePay)[1])),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(color: ColoerPicker(choice_IncomePay)[0])),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(color: ColoerPicker(choice_IncomePay)[1])),
     );
   }
   ColoerPicker(int choice_IncomePay){

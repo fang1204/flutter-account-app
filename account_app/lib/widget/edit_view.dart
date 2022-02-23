@@ -1,39 +1,46 @@
-
+// import 'package:account_app/model/bill_data.dart';
+import 'package:account_app/data/home_account_list.dart';
+import 'package:account_app/utils/util.dart';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:account_app/home.dart';
-import 'package:account_app/utils/util.dart';
+import 'package:account_app/model/bill_data.dart';
+import 'package:account_app/utils/shared_preference_util.dart';
+import 'package:account_app/widget/accountInput_view.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:sqflite/sqlite_api.dart';
-import '../common/object_decoration.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-import '../model/bill_data.dart';
-import '../utils/shared_preference_util.dart';
-/*
-Ting編輯
-記帳頁面
- */
+import '../utils/util.dart';
+//
+//
+class EditableListTile extends StatefulWidget {
+  final int editIndex;
+  final int editType;
+  final String editDate;
+  final int editQuantity;
+  final int editItemType;
+  EditableListTile({Key ?key,
+    required this.editIndex,
+    required this.editType,
+    required this.editDate,
+    required this.editQuantity,
+    required this.editItemType});
 
-class AccountInputView extends StatefulWidget{
-  const AccountInputView({Key? key}) : super(key: key);
+
 
   @override
-  _AccountInputViewState createState() => _AccountInputViewState();
+  _EditableListTileState createState() => _EditableListTileState();
 }
 
-
-class _AccountInputViewState extends State<AccountInputView> {
+class _EditableListTileState extends State<EditableListTile> {
   //日期
   DateTime selectedDate = DateTime.now();
   DateTime ?_dateTime;
+
+
   //輸入金錢
   String money='';
   //選擇收入、支出狀態
@@ -46,65 +53,65 @@ class _AccountInputViewState extends State<AccountInputView> {
   int ?toggleSwitch_labels;
   //都有填寫才可送出
   bool isButtonAbled = false;
-
+  bool istogg = false;
   List allStatus=[];
+  List Status=[];
 
   TextEditingController myController = TextEditingController();
 
   //下拉式選單類別
   //收入
-  List incomeDropItems=[
-    "薪資",
-    "打工",
-    "獎學金",
-    "投資",
-    "年終",
-    "發票",
-    "樂透",
-  ];
+  List incomeDropItems=["薪資", "打工", "獎學金", "投資",
+    "年終", "發票", "樂透",];
   //支出
-  List payDropItems = [
-    '食物',
-  '飲料',
-  '文具',
-  '娛樂',
-  '服裝',
-  '運動',
-  '交通',
-  '住宿',
-  '3C產品',
-  '家俱',
-  '保險',
-  '醫藥費',
-  ];
+  List payDropItems = ['食物', '飲料', '文具', '娛樂', '服裝', '運動', '交通',
+    '住宿', '3C產品', '家俱', '保險', '醫藥費',];
   //點選後收入or支出要產生的下拉選單
   //預設
-  List confirm_IncomePay=[
-    "薪資",
-    "打工",
-    "獎學金",
-    "投資",
-    "年終",
-    "發票",
-    "樂透",
-  ];
+  List confirm_IncomePay=[];
   final Color colorActiveFont = Color.fromARGB(0xff, 250, 244, 220);
   final Color colorI = Color.fromARGB(0xff, 94, 100, 115);
   final Color colorE = Color.fromARGB(0xff, 255, 159, 151);
 
+  @override
+  void initState() {
+    super.initState();
 
-  // final myController = TextEditingController();
-  // String text = "";
+    this.choice_IncomePay = widget.editType;
 
+    if(this.choice_IncomePay == 0){
+      this.confirm_IncomePay = incomeDropItems;
+    }
+    else{
+      this.confirm_IncomePay = payDropItems;
+    }
+    this.selectedValue_index = widget.editItemType;
+    this.selectedValue = this.confirm_IncomePay[this.selectedValue_index];
+    this.myController.text = widget.editQuantity.toString();
+    this._dateTime = DateTime.parse(widget.editDate);
+    this.allStatus.add(this.myController.text);     //錢錢
+    this.allStatus.add(this.confirm_IncomePay[this.selectedValue_index]); //項目
+    this.allStatus.add(this._dateTime);   //時間
+    this.allStatus.add(this.choice_IncomePay);    //正負
+
+    this.Status.add(int.parse(this.myController.text));     //錢錢
+    this.Status.add(this.selectedValue_index); //項目
+    this.Status.add(this._dateTime.toString());   //時間
+    this.Status.add(this.choice_IncomePay);
+
+
+
+  }
 
 
   @override
   Widget build(BuildContext context) {
+    // choice_IncomePay = widget.editType;
 
+    // String money = widget.editQuantity.toString();
     return Scaffold(
       appBar: AppBar(
-        //最上排
-        //調整日期
+        //最上排 //調整日期
         centerTitle: true,
         title: ToggleSwitch(
           fontSize:19.sp,
@@ -119,13 +126,16 @@ class _AccountInputViewState extends State<AccountInputView> {
           labels: const["收入","支出"],
           onToggle: (index) {
             choice_IncomePay = index!;
+            // log("choice_IncomePay ${choice_IncomePay}");
             setState(() {
-              //(selectedValue);
               //切換類別列表
               toggleSwitch_labels = index;
+
+              // log("toggleSwitch_labels ${toggleSwitch_labels}");
               if (index==0) {
                 confirm_IncomePay = incomeDropItems;
-              } else {
+              }
+              else {
                 confirm_IncomePay = payDropItems;
               }
               //重新設置下拉選單的select value
@@ -135,8 +145,6 @@ class _AccountInputViewState extends State<AccountInputView> {
           },
         ),
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
-        // foregroundColor :Color.fromARGB(0xff, 64, 102, 99),
-
       ),
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -154,15 +162,10 @@ class _AccountInputViewState extends State<AccountInputView> {
                 DropdownButton2(
                   isExpanded: true,
                   hint: Row(
-                    children: const [
-                      Icon(
-                        Icons.list,
-                        size: 30,
-                        color: Color.fromARGB(0xff, 250, 244, 220),
-                      ),
+                    children: [
                       Expanded(
                         child: Text(
-                          '選擇類別',
+                          selectedValue ?? '尚未選擇類別',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 20.0, color:Color.fromARGB(0xff, 250, 244, 220)),
                           overflow: TextOverflow.ellipsis,
@@ -234,9 +237,6 @@ class _AccountInputViewState extends State<AccountInputView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /*
-                    Text(_dateTime == null ? '尚未選擇日期' : _dateTime.toString().substring(0,11),
-                        style: TextStyle(fontSize: 20.sp,color: ChangeColor(choice_IncomePay))),*/
                   Container(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -265,67 +265,66 @@ class _AccountInputViewState extends State<AccountInputView> {
 
             // 空格
             Expanded(
-                flex:6,
-                child: Container(
+              flex:6,
+              child: Container(
 
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        readOnly: true,
-                        decoration: new InputDecoration.collapsed(
-                                      hintText: '請輸入金額'
-                                  ),
-                        controller: myController,
-                        style: TextStyle(
-                            // decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.solid,
-                            fontSize:24.sp,
-                            color: Colors.black
-                            // TextFieldDecoration().
-                        ),
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      readOnly: true,
+                      decoration: new InputDecoration.collapsed(hintText: '請輸入金額'),
+                      controller: myController,
+                      style: TextStyle(
+                        // decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.solid,
+                          fontSize:24.sp,
+                          color: Colors.black
+                        // TextFieldDecoration().
+                      ),
                       // Text(
                       //   money,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CalculatorKeyboard(
-                          onValueChange:(value){
-                            setState(() {
-                              if(value != "ok"){
-                                if (value == "AC"){
-                                  money = "";
-                                  myController.text = money;
-                                  log("123 ${value}");
-                                }
-                                else{
-                                  money += value;
-                                  myController.text = money;
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CalculatorKeyboard(
+                      onValueChange:(value){
+                        setState(() {
 
-                                }
-                              }
-                              else{
-                                allStatus=  [];
-                                allStatus.add(myController.text);
-                                allStatus.add(selectedValue);
-                                allStatus.add(_dateTime);
-                                allStatus.add(choice_IncomePay);
-                                isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
-                                if(isButtonAbled){
-                                  _save();
-                                  Navigator.pop(context);
-                                }
-                                else{
-                                  showAlert(context);
-                                }
-                              }
-                            });
-                            print(value);
-                          },
-                      ),
-                    ],
-                  ),
+                          if(value != "ok"){
+                            if (value == "AC"){
+                              money = "";
+                              myController.text = money;
+                              // log("123 ${value}");
+                            }
+                            else{
+                              money += value;
+                              myController.text = money;
+
+                            }
+                          }
+                          else{
+                            allStatus[0] = int.parse(myController.text);
+                            allStatus[1] = (confirm_IncomePay.indexOf(selectedValue));
+                            allStatus[2] = (_dateTime.toString());
+                            allStatus[3] = (choice_IncomePay);
+                            isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
+
+                            if(isButtonAbled){
+                              Provider.of<HomeAccountList>(context, listen: false).editItem(widget.editIndex,allStatus);
+                              Navigator.pop(context);
+                            }
+                            else{
+                              showAlert(context);
+                            }
+                          }
+                        });
+                        print(value);
+                      },
+                    ),
+                  ],
                 ),
+              ),
             ),
             // 下方的確認或是刪除
             Expanded(
@@ -345,19 +344,14 @@ class _AccountInputViewState extends State<AccountInputView> {
                     ),
                     IconButton(
                         onPressed: (){
-                          allStatus=  [];
-                          allStatus.add(money);
-                          allStatus.add(selectedValue);
-                          allStatus.add(_dateTime);
-                          allStatus.add(choice_IncomePay);
-                          log("456${allStatus}");
-                          //print(choice_IncomePay);
-                          // CheckDoneAll(allStatus);
-
+                          allStatus[0] = int.parse(myController.text);
+                          allStatus[1] = (confirm_IncomePay.indexOf(selectedValue));
+                          allStatus[2] = (_dateTime.toString());
+                          allStatus[3] = (choice_IncomePay);
                           isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
-                          log("isButtonAbled ${isButtonAbled}");
-                          if(isButtonAbled = true){
-                            _save();
+
+                          if(isButtonAbled){
+                            Provider.of<HomeAccountList>(context, listen: false).editItem(widget.editIndex,allStatus);
                             Navigator.pop(context);
                           }
                           else{
@@ -375,16 +369,6 @@ class _AccountInputViewState extends State<AccountInputView> {
       ),
     );
   }
-
-  //變換顏色
-  // ChangeColor(int choice_IncomePay){
-  //   if(choice_IncomePay==0){
-  //     return colorI;
-  //   }
-  //   else{
-  //     return colorE;
-  //   }
-  // }
 
   //確認是否全部都有填寫
   CheckDoneAll(List allStatus, bool isButtonAbled){
@@ -423,15 +407,19 @@ class _AccountInputViewState extends State<AccountInputView> {
   }
 
   //SharedPreferences存資料
-  _save() async {
+  _save(List allStatus) async {
     SharedPreferenceUtil prefs = SharedPreferenceUtil();
     //要存入的資料
+    // allStatus[0] = int.parse(myController.text);
+    // allStatus[1] = (confirm_IncomePay.indexOf(selectedValue));
+    // allStatus[2] = (_dateTime.toString());
+    // allStatus[3] = (choice_IncomePay);
     BillData perData =
     BillData(
-        type: choice_IncomePay,
-        date: _dateTime.toString(),
-        itemType: selectedValue_index,
-        quantity:int.parse(money)
+        type: allStatus[3],
+        date: allStatus[2],
+        itemType: allStatus[1],
+        quantity:allStatus[0]
     );
 
     List totalData = [];
@@ -450,129 +438,10 @@ class _AccountInputViewState extends State<AccountInputView> {
       prefs.saveBillData(jsonEncode(totalData));
     }
 
-    print(await prefs.getBillData());
+
+    // print(await prefs.getBillData());
 
 
 
   }
-
-
 }
-
-final Color colorActiveFont = Color.fromARGB(0xff, 246 , 236, 192);
-final Color colorI = Color.fromARGB(0xff, 94, 100, 115);
-final Color colorE = Color.fromARGB(0xff, 255, 159, 151);
-
-class CalculatorKeyboard extends StatelessWidget {
-  final ValueChanged<String> onValueChange;
-  CalculatorKeyboard({Key? key, required this.onValueChange}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    final List<Map> _keyboardList = [
-      // {'text': '+', 'color':colorActiveFont},
-      // {'text': '-', 'color': colorActiveFont},
-      // {'text': 'x', 'color':colorActiveFont},
-      // {'text': '÷', 'color': colorActiveFont},
-
-
-
-      //7 8 9 ÷ ac
-      {'text': '7', 'color': colorActiveFont},
-      {'text': '8', 'color': colorI},
-      {'text': '9', 'color': colorI},
-      // {'text': 'AC', 'color':colorActiveFont},
-
-      {'text': '4', 'color': colorI},
-      {'text': '5', 'color': colorI},
-      {'text': '6', 'color': colorI},
-      // {'text': '←', 'color': colorActiveFont},
-
-
-      {'text': '1', 'color': colorI},
-      {'text': '2', 'color': colorI},
-      {'text': '3', 'color': colorI},
-      {'text': 'AC', 'color':colorActiveFont},
-
-      {'text': '0','color': colorI},
-      {'text': 'ok','color':colorI},
-      // {'text': '.', 'color': colorI},
-
-    ];
-    // return
-    return Wrap(
-      runSpacing: 30,
-      spacing: 50,
-      children: List.generate(_keyboardList.length, (index) {
-        return CalculatorItem(
-          text: _keyboardList[index]['text'],
-          color: _keyboardList[index]['color'],
-          onValueChange: onValueChange,
-        );
-      }),
-    );
-  }
-}
-
-
-class CalculatorItem extends StatelessWidget {
-  final String text;
-  final Color color;
-  final ValueChanged<String> onValueChange;
-
-  CalculatorItem(
-      {required this.text,
-        // required this.textColor,
-        required this.color,
-        // required this.highlightColor,
-        // required this.height,
-        required this.onValueChange});
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Ink(
-      decoration: BoxDecoration(
-          color:colorI,
-          border:Border.all(),
-          borderRadius: BorderRadius.all(Radius.circular(200))),
-      child: InkWell(
-        onTap: () {
-          onValueChange('$text');
-          // log("text_  ${onValueChange(text)}");
-        },
-        borderRadius: BorderRadius.all(Radius.circular(200)),
-        child: Container(
-          width:  65,
-          height:65,
-          padding: EdgeInsets.only(top:10),
-          alignment: Alignment.center,
-          // alignment: height == null ? Alignment.center : Alignment.centerLeft,
-          child: Text(
-            '$text',
-            style: TextStyle(color: colorE, fontSize: 24),
-          ),
-        ),
-      ),
-    );
-
-
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

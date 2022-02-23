@@ -1,3 +1,4 @@
+import 'package:account_app/pages/about.dart';
 import "package:flutter/material.dart";
 import 'package:account_app/pages/theme_option.dart';
 
@@ -6,42 +7,40 @@ enum SearchTypes {
   users,
 }
 class SettingPage extends StatelessWidget {
-  Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
-    context:  context,
-    builder: (context) =>AlertDialog(
-      title:Text("Do you want to exit?"),
-      actions: [
-        ElevatedButton(
-          child: Text('No'),
-          onPressed: () =>Navigator.pop(context,false),
-        ),
-        ElevatedButton(
-          child: Text('Yes'),
-          onPressed: () =>Navigator.pop(context,true),
-        ),
-      ],
-    ),
-  );
+  // Future<bool?> showWarning(BuildContext context) async=> showDialog<bool>(
+  //   context:  context,
+  //
+  //   builder: (context) =>AlertDialog(
+  //     title:Text("Do you want to exit?"),
+  //     actions: [
+  //       ElevatedButton(
+  //         child: Text('No'),
+  //         onPressed: () =>Navigator.pop(context),
+  //       ),
+  //       ElevatedButton(
+  //         child: Text('Yes'),
+  //         onPressed: () =>Navigator.pop(context,true),
+  //       ),
+  //     ],
+  //   ),
+  // );
 
   @override
-  Widget build(BuildContext context) =>WillPopScope(
-      onWillPop: ()async{
-        final  shouldPop = await showWarning(context);
-        return shouldPop ?? false;
-      },
-
-      child:Scaffold(
+  Widget build(BuildContext context){
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: Colors.white,
+            color: Color.fromARGB(0xff, 64, 102, 99),
           ),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.pop(context);
           },
         ),
-        title: Text("Setting"),
+        title: Text('Setting',
+          style: TextStyle(color: Color.fromARGB(0xff, 64, 102, 99)),
+        ),
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
       ),
 
@@ -85,7 +84,10 @@ class SettingPage extends StatelessWidget {
               ],
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, "/about");
+              // Navigator.pushReplacementNamed(context, "/about");
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context)=>AboutPage()));
             },
           ),
           ListTile(
@@ -104,8 +106,9 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
-    ),);
+    );
   }
+}
 
 
 Future<void> showAlert(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:account_app/pages/setting.dart';
 import "package:flutter/material.dart";
 
 enum SearchTypes {
@@ -32,13 +33,16 @@ class AboutPage extends StatelessWidget {
       child:Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
+        foregroundColor: Color.fromARGB(0xff, 64, 102, 99),
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, "/setting");
+            // Navigator.pushReplacementNamed(context, "/setting");
+            Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context)=>SettingPage()));
           },
         ),
         title: Text('About me'),

@@ -46,6 +46,8 @@ dependencies:
   syncfusion_flutter_charts: ^19.4.48
   shared_preferences: ^2.0.13
   grouped_list: ^4.2.0
+  collection: ^1.15.0
+  flutter_slidable: ^1.2.0
 
 
 

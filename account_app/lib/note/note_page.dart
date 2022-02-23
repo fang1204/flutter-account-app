@@ -72,7 +72,9 @@ class _NotesPageState extends State<NotesPage> {
     },
       child:Scaffold(
     appBar: AppBar(
+
       backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
+      foregroundColor: Color.fromARGB(0xff, 64, 102, 99),
       title: Text(
         'Notes',
         style: TextStyle(fontSize: 24),
@@ -80,10 +82,9 @@ class _NotesPageState extends State<NotesPage> {
       leading: IconButton(
         icon: Icon(
           Icons.keyboard_arrow_left,
-          color: Colors.white,
         ),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/home");
+          Navigator.pop(context);
         },
       ),
     ),

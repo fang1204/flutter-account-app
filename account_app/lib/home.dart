@@ -1,5 +1,9 @@
 import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/model/account.dart';
+import 'package:account_app/note/note_page.dart';
+import 'package:account_app/pages/User.dart';
+import 'package:account_app/pages/linechart.dart';
+import 'package:account_app/pages/setting.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:account_app/widget/accountInput_view.dart';
 import 'package:account_app/widget/card_view.dart';
@@ -20,6 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   HomeAccountList? homeAccountList;
   final title = '測試';
+  final Color colorFont = Color.fromARGB(0xff, 64, 102, 99);
   @override
   void initState() {
     // TODO: implement initState
@@ -37,41 +42,43 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         //最上排
-        title: Text('日期調整器'), //調整日期
+        //調整日期
+        title: Text('日期調整器'),
         backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
-
-        /*標題列(清單、和日期)
-        leading: IconButton(        //左滑清單
-
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
-        ),
+        foregroundColor :colorFont,
+//        標題列(清單、和日期)
+//         leading: IconButton(        //左滑清單
+//
+//           icon: const Icon(Icons.menu),
+//           color: Color.fromARGB(0xff, 64, 102, 99),
+//           onPressed: () {
+//             // Navigator.defaultGenerateInitialRoutes(,);
+//           },
+//         ),
         actions: <Widget>[
           IconButton(               //+
-            icon: Icon(Icons.add_circle),
-            onPressed: () {},
+            icon: Icon(Icons.change_circle),
+            onPressed: () {
+
+
+            },
           ),
-          IconButton(               //右邊三點
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+
         ],
-        */
+
       ),
       drawer: Drawer(
         //清單
         child: ListView(
           children:  <Widget>[
             UserAccountsDrawerHeader(
-              onDetailsPressed:() {
-                Navigator.pushReplacementNamed(context, "/user");
-              },
+              arrowColor: colorFont,
               decoration: BoxDecoration(
                 color: Color.fromARGB(0xFF, 181, 215, 212),
               ),
-              accountName: Text("1",style: TextStyle(color: Colors.black87,fontSize: 18),),
+              accountName: Text("1",style: TextStyle(color: colorFont,fontSize: 20),),
               //設定Email
-              accountEmail: Text("****@gmail.com",style: TextStyle(color: Colors.black87,fontSize: 15),),
+              accountEmail: Text("****@gmail.com",style: TextStyle(color: colorFont,fontSize: 20),),
               //設定大頭照
               currentAccountPicture: CircleAvatar(
                 //照片
@@ -79,33 +86,58 @@ class _HomePageState extends State<HomePage> {
                 backgroundImage: NetworkImage(
                     'https://image.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?w=1060'),
                 backgroundColor: Colors.transparent,
+
               ),
+              otherAccountsPictures:  <Widget>[
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context)=>SliverAppBarDemo()));
+                  },
+                ),
+              ],
+
             ),
             ListTile(
+              textColor: colorFont,
               leading: Icon(Icons.equalizer_rounded),
               title: Text('折線圖'),
               subtitle: Text('Line chart'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
-                Navigator.pushReplacementNamed(context, "/Line");
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context)=>LineChart()));
+                // Navigator.pushReplacementNamed(context, "/Line");
               },
             ),
             ListTile(
+
+              textColor: colorFont,
               leading: Icon(Icons.settings),
               title: Text('功能設定'),
               subtitle: Text('Settings'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
-                Navigator.pushReplacementNamed(context, "/setting");
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context)=>SettingPage()));
               },
             ),
             ListTile(
+              textColor: colorFont,
               leading: Icon(Icons.mail),
               title: Text('備忘錄'),
               subtitle: Text('Memorandum'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: (){
-                Navigator.pushReplacementNamed(context, "/note");
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context)=>NotesPage()));
+                // Navigator.pushReplacementNamed(context, "/note");
               },
             ),
           ],
@@ -118,21 +150,20 @@ class _HomePageState extends State<HomePage> {
         //主頁面/*雯坊*/
         child: (
 
-          Consumer<HomeAccountList>(
-            builder: (context, data, child){
-              // data
-              return Column(
-                  children: [
-                    Expanded(
-                      //上頁面
-                        flex: 9,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              //上左:支出
-                              flex: 2,
-                              child: Container(
-                                padding: EdgeInsets.only(right: 10, top: 10),
+            Consumer<HomeAccountList>(
+                builder: (context, data, child){
+                  // data
+                  return Column(
+                    children: [
+                      Expanded(
+                        //上頁面
+                          flex: 9,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 20.w,
+                                height: 100.h,
+                                padding: EdgeInsets.only(top: 10),
                                 // color: Colors.black12,
                                 alignment: Alignment.topCenter,
                                 // child: Text(
@@ -154,22 +185,14 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              //上中:結餘
-                              flex: 7,
-                              child: OutcomeChart(
-                                // child: Text(
-                                //   '結餘',
-                                //   style: TextStyle(fontSize: 20),
-                                // )
-                              ),
-                            ),
-                            Expanded(
-                              //上右:收入
-                              flex: 2,
-                              child: Container(
-                                padding: EdgeInsets.only(right: 10, top: 10),
+                              Container(
+                                  width: 60.w,
+                                  height: 100.h,
+                                  child:OutcomeChart()),
+                              Container(
+                                width: 20.w,
+                                height: 100.h,
+                                padding: EdgeInsets.only(top: 10),
                                 // color: Colors.black12,
                                 alignment: Alignment.topCenter,
                                 // child: Text(
@@ -192,20 +215,18 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               )
-                              ,
-                            ),
-                          ],
-                        )),
+                            ],
+                          )),
 
-                    Expanded(
-                      //中頁面:內縮10要放一個清單在這裡
-                        flex: 13,
-                        child: Container(
-                          alignment: Alignment.topCenter,
-                          padding: EdgeInsets.all(10),
-                          // child: ListItem(),
-                          child: GroupedList(),
-                          /*
+                      Expanded(
+                        //中頁面:內縮10要放一個清單在這裡
+                          flex: 13,
+                          child: Container(
+                            alignment: Alignment.topCenter,
+                            padding: EdgeInsets.all(10),
+                            // child: ListItem(),
+                            child: GroupedList(),
+                            /*
                   child: ListView.builder(                 //主頁面
 
                     // itemCount: creditAccount.length,
@@ -220,21 +241,21 @@ class _HomePageState extends State<HomePage> {
 
                   ),
                   */
-                          // color: Colors.cyanAccent,
-                          // child: Text(
-                          //   '紀錄list',
-                          //   textScaleFactor: 1,
-                          //   style: TextStyle(fontSize: 20.0),
-                          // ),
-                        )
-                    ),
+                            // color: Colors.cyanAccent,
+                            // child: Text(
+                            //   '紀錄list',
+                            //   textScaleFactor: 1,
+                            //   style: TextStyle(fontSize: 20.0),
+                            // ),
+                          )
+                      ),
 
-                  ],
-              );
+                    ],
+                  );
 
-            }
+                }
 
-          )
+            )
         ),
 
 

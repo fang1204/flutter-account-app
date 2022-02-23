@@ -3,7 +3,6 @@ import 'package:account_app/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'balance.dart';
 import 'package:account_app/pages/routes.dart';
 import 'package:account_app/pages/setting.dart';
 import 'package:account_app/pages/about.dart';
@@ -34,14 +33,14 @@ class MyApp extends StatelessWidget {
           },
         ),
         debugShowCheckedModeBanner: false,
-        routes: {
-            GitmeRebornRoutes.setting: (context) => SettingPage(),
-            GitmeRebornRoutes.home: (context) => HomePage(),
-            GitmeRebornRoutes.about: (context) => AboutPage(),
-            GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
-            GitmeRebornRoutes.Line: (context) => LineChart(),
-            GitmeRebornRoutes.note: (context) => NotesPage(),
-        },
+        // routes: {
+        //     GitmeRebornRoutes.setting: (context) => SettingPage(),
+        //     GitmeRebornRoutes.home: (context) => HomePage(),
+        //     GitmeRebornRoutes.about: (context) => AboutPage(),
+        //     GitmeRebornRoutes.user: (context) => SliverAppBarDemo(),
+        //     GitmeRebornRoutes.Line: (context) => LineChart(),
+        //     GitmeRebornRoutes.note: (context) => NotesPage(),
+        // },
         // home: HomePage(),
       ),
     );
