@@ -51,24 +51,33 @@ class _GroupedListState extends State<GroupedList> {
               ),
             ),
 
-
             //item
             itemBuilder: (context, item) {
               return Slidable(
 
                 key: UniqueKey(),
 
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-                  leading: Icon(typeToList(item['type'],item['itemType'])[2]),
-                  title: Text(typeToList(item['type'],item['itemType'])[0]),
-                  trailing: Text(
-                    "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
-                    // maxLines: 2,
-                  ),
-                  onTap: () {
+                child: Card(
+                  shape:RoundedRectangleBorder(
 
-                  },
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  child: Container(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+                      leading: Icon(typeToList(item['type'],item['itemType'])[2]),
+                      title: Text(typeToList(item['type'],item['itemType'])[0]),
+                      trailing: Text(
+                        "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
+                        // maxLines: 2,
+                      ),
+                      onTap: () {
+
+                      },
+                    ),
+                  ),
                 ),
                 startActionPane: ActionPane(
                   // A motion is a widget used to control how the pane animates.

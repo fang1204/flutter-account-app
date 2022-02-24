@@ -14,6 +14,7 @@ import 'package:account_app/widget/pieCharts_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,8 +24,80 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   HomeAccountList? homeAccountList;
-  final title = '測試';
+  final YearMonth = "";
   final Color colorFont = Color.fromARGB(0xff, 64, 102, 99);
+  final Color colorback =Color.fromARGB(0xFF, 181, 215, 212);
+  final DateFormat formatter = DateFormat('yyyy月MM');
+  bool pickerIsExpanded = false;
+  int _pickerYear = DateTime.now().year;
+  DateTime _selectedMonth = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    1,
+  );
+
+  dynamic _pickerOpen = false;
+
+  void switchPicker() {
+    setState(() {
+      _pickerOpen ^= true;
+    });
+  }
+
+  List<Widget> generateRowOfMonths(from, to) {
+    List<Widget> months = [];
+    for (int i = from; i <= to; i++) {
+      DateTime dateTime = DateTime(_pickerYear, i, 1);
+      final backgroundColor = dateTime.isAtSameMomentAs(_selectedMonth)
+          ? colorback
+          : Colors.transparent;
+      months.add(
+        AnimatedSwitcher(
+          duration: kThemeChangeDuration,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          child: TextButton(
+            key: ValueKey(backgroundColor),
+            onPressed: () {
+              setState(() {
+                _selectedMonth = dateTime;
+              });
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: backgroundColor,
+              shape: CircleBorder(),
+            ),
+            child: Text(
+              DateFormat('MMM').format(dateTime),
+              style: TextStyle(fontSize: 17, color: colorFont),
+            ),
+          ),
+        ),
+      );
+    }
+    return months;
+  }
+
+  List<Widget> generateMonths() {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: generateRowOfMonths(1, 4),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: generateRowOfMonths(5, 8),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: generateRowOfMonths(9, 12),
+      )
+    ];
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -41,30 +114,17 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        //最上排
-        //調整日期
-        title: Text('日期調整器'),
-        backgroundColor: const Color.fromARGB(0xFF, 181, 215, 212),
-        foregroundColor :colorFont,
-//        標題列(清單、和日期)
-//         leading: IconButton(        //左滑清單
-//
-//           icon: const Icon(Icons.menu),
-//           color: Color.fromARGB(0xff, 64, 102, 99),
-//           onPressed: () {
-//             // Navigator.defaultGenerateInitialRoutes(,);
-//           },
-//         ),
-        actions: <Widget>[
-          IconButton(               //+
-            icon: Icon(Icons.change_circle),
-            onPressed: () {
-
-
-            },
-          ),
-
-        ],
+          centerTitle: true,
+          backgroundColor: colorback,
+          foregroundColor :colorFont,
+          title: Row(mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                DateFormat('yyyy月MM').format(_selectedMonth),
+                style: TextStyle(fontSize: 20, color: colorFont),
+              ),
+              IconButton(onPressed: switchPicker, icon: Icon(Icons.arrow_drop_down)),
+            ],)
 
       ),
       drawer: Drawer(
@@ -144,121 +204,142 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      body: Container(
-        width:100.w,    // This will take 20% of the screen's width
-        height: Adaptive.h(100),
-        //主頁面/*雯坊*/
-        child: (
+      body: Stack(
+        children: [
+          Container(
+            width:100.w,    // This will take 20% of the screen's width
+            height: Adaptive.h(100),
+            //主頁面/*雯坊*/
+            child: (
 
-            Consumer<HomeAccountList>(
-                builder: (context, data, child){
-                  // data
-                  return Column(
-                    children: [
-                      Expanded(
-                        //上頁面
-                          flex: 9,
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 20.w,
-                                height: 100.h,
-                                padding: EdgeInsets.only(top: 10),
-                                // color: Colors.black12,
-                                alignment: Alignment.topCenter,
-                                // child: Text(
-                                //   '收入',
-                                //   style: TextStyle(fontSize: 20),
-                                // )
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "支出\n"+"${data.p_n[1]}",
-                                      // "支出",
-                                      style: TextStyle(fontSize: 20),
+                Consumer<HomeAccountList>(
+                    builder: (context, data, child){
+                      // data
+                      return Column(
+                        children: [
+                          Expanded(
+                            //上頁面
+                              flex: 9,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 20.w,
+                                    height: 100.h,
+                                    padding: EdgeInsets.only(top: 10),
+                                    alignment: Alignment.topCenter,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "支出\n"+"${data.p_n[1]}",
+                                          // "支出",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+
+                                      ],
                                     ),
-                                    // TextField(
-                                    //   onChanged: (text) {
-                                    //     print("支出:\n"+"${cal()[1]}");
-                                    //   },
-                                    // )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  width: 60.w,
-                                  height: 100.h,
-                                  child:OutcomeChart()),
-                              Container(
-                                width: 20.w,
-                                height: 100.h,
-                                padding: EdgeInsets.only(top: 10),
-                                // color: Colors.black12,
-                                alignment: Alignment.topCenter,
-                                // child: Text(
-                                //   '收入',
-                                //   style: TextStyle(fontSize: 20),
-                                // )
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "收入\n"+"${data.p_n[0]}",
-                                      // "收入",
-                                      style: TextStyle(fontSize: 20),
+                                  ),
+                                  Container(
+                                      width: 60.w,
+                                      height: 100.h,
+                                      child:OutcomeChart()),
+                                  Container(
+                                    width: 20.w,
+                                    height: 100.h,
+                                    padding: EdgeInsets.only(top: 10),
+                                    // color: Colors.black12,
+                                    alignment: Alignment.topCenter,
+
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "收入\n"+"${data.p_n[0]}",
+                                          // "收入",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+
+                                      ],
                                     ),
-                                    // Text(
-                                    //     "\n"+"${cal()[0]}"
-                                    //   // onChanged: (text) {
-                                    //   //   print("收入:\n"+"${cal()[0]}");
-                                    //   // },
-                                    // )
-                                  ],
-                                ),
+                                  )
+                                ],
+                              )),
+
+                          Expanded(
+                            //中頁面:內縮10要放一個清單在這裡
+                              flex: 13,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                padding: EdgeInsets.all(10),
+                                child: GroupedList(),
                               )
-                            ],
-                          )),
+                          ),
 
-                      Expanded(
-                        //中頁面:內縮10要放一個清單在這裡
-                          flex: 13,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            padding: EdgeInsets.all(10),
-                            // child: ListItem(),
-                            child: GroupedList(),
-                            /*
-                  child: ListView.builder(                 //主頁面
-
-                    // itemCount: creditAccount.length,
-                    itemCount: data.getCreditCardList().length,
-                    itemBuilder: (context, position){
-                      return CardView(
-                          data.getCreditCardList()[position]
+                        ],
                       );
 
+                    }
 
-                    },
+                )
+            ),
 
-                  ),
-                  */
-                            // color: Colors.cyanAccent,
-                            // child: Text(
-                            //   '紀錄list',
-                            //   textScaleFactor: 1,
-                            //   style: TextStyle(fontSize: 20.0),
-                            // ),
-                          )
+
+          ),
+          Container(
+            width: 400, height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Material(
+                  color: Theme.of(context).cardColor,
+                  child: AnimatedSize(
+                    curve: Curves.easeInOut,
+
+                    duration: Duration(milliseconds: 300),
+                    child: Container(
+                      height: _pickerOpen ? null : 0.0,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _pickerYear = _pickerYear - 1;
+                                  });
+                                },
+                                icon: Icon(Icons.navigate_before_rounded),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    _pickerYear.toString(),
+                                    style: TextStyle(fontSize: 20, color: colorFont),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _pickerYear = _pickerYear + 1;
+                                  });
+                                },
+                                icon: Icon(Icons.navigate_next_rounded),
+                              ),
+                            ],
+                          ),
+                          ...generateMonths(),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                        ],
                       ),
+                    ),
+                  ),
+                ),
 
-                    ],
-                  );
-
-                }
-
-            )
-        ),
-
-
+              ],
+            ),
+          ),
+        ],
       ),
 
       //Ting編輯
