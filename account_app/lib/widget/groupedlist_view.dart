@@ -24,11 +24,9 @@ class _GroupedListState extends State<GroupedList> {
   Widget build(BuildContext context) {
     return Consumer<HomeAccountList>(
         builder: (context, data, child){
-
-
           return GroupedListView<dynamic, String>(
 
-            elements: data.tmp,
+            elements: data.dateList,
             groupBy: (item) => formatDate(item['date']),
             groupSeparatorBuilder: (groupValue) => Padding(
               padding: EdgeInsets.all(5),
@@ -53,6 +51,15 @@ class _GroupedListState extends State<GroupedList> {
 
             //item
             itemBuilder: (context, item) {
+              // data.totalData.forEach((element) {log("message  ${element.date}");});
+              // int index = data.tmp.indexOf(item);
+              // if(data.totalData[index].date.toString().split("-")[1] == "02"){
+              //   log("message02   ${data.totalData[index].date}");
+              // }
+              // else{
+              //   log("message   ${data.totalData[index].date}");
+              // }
+
               return Slidable(
 
                 key: UniqueKey(),
@@ -69,13 +76,8 @@ class _GroupedListState extends State<GroupedList> {
                       contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
                       leading: Icon(typeToList(item['type'],item['itemType'])[2]),
                       title: Text(typeToList(item['type'],item['itemType'])[0]),
-                      trailing: Text(
-                        "\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",
-                        // maxLines: 2,
-                      ),
-                      onTap: () {
-
-                      },
+                      trailing: Text("\$"+typeToList(item['type'],item['itemType'])[1]+"${item['quantity']}",),
+                      onTap: () {},
                     ),
                   ),
                 ),
@@ -112,7 +114,7 @@ class _GroupedListState extends State<GroupedList> {
                       onPressed:(context) {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context)=>
-                                EditableListTile(editIndex: data.tmp.indexOf(item),editType:item['type'], editDate:item['date'], editQuantity:item['quantity'], editItemType:item['itemType']))).then((value) {
+                                EditableListTile(editIndex: data.dateList.indexOf(item),editType:item['type'], editDate:item['date'], editQuantity:item['quantity'], editItemType:item['itemType']))).then((value) {
 
                         }
                         );
@@ -127,7 +129,6 @@ class _GroupedListState extends State<GroupedList> {
                 ),
 
               );
-
             },
             groupComparator: (group1, group2) => group1.compareTo(group2),
             itemComparator: (item1, item2) =>

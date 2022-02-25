@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/home.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -65,17 +66,17 @@ class _AccountInputViewState extends State<AccountInputView> {
   //支出
   List payDropItems = [
     '食物',
-  '飲料',
-  '文具',
-  '娛樂',
-  '服裝',
-  '運動',
-  '交通',
-  '住宿',
-  '3C產品',
-  '家俱',
-  '保險',
-  '醫藥費',
+    '飲料',
+    '文具',
+    '娛樂',
+    '服裝',
+    '運動',
+    '交通',
+    '住宿',
+    '3C產品',
+    '家俱',
+    '保險',
+    '醫藥費',
   ];
   //點選後收入or支出要產生的下拉選單
   //預設
@@ -91,11 +92,6 @@ class _AccountInputViewState extends State<AccountInputView> {
   final Color colorActiveFont = Color.fromARGB(0xff, 250, 244, 220);
   final Color colorI = Color.fromARGB(0xff, 94, 100, 115);
   final Color colorE = Color.fromARGB(0xff, 255, 159, 151);
-
-
-  // final myController = TextEditingController();
-  // String text = "";
-
 
 
   @override
@@ -265,67 +261,67 @@ class _AccountInputViewState extends State<AccountInputView> {
 
             // 空格
             Expanded(
-                flex:6,
-                child: Container(
+              flex:6,
+              child: Container(
 
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        readOnly: true,
-                        decoration: new InputDecoration.collapsed(
-                                      hintText: '請輸入金額'
-                                  ),
-                        controller: myController,
-                        style: TextStyle(
-                            // decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.solid,
-                            fontSize:24.sp,
-                            color: Colors.black
-                            // TextFieldDecoration().
-                        ),
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      readOnly: true,
+                      decoration: new InputDecoration.collapsed(
+                          hintText: '請輸入金額'
+                      ),
+                      controller: myController,
+                      style: TextStyle(
+                        // decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.solid,
+                          fontSize:24.sp,
+                          color: Colors.black
+                        // TextFieldDecoration().
+                      ),
                       // Text(
                       //   money,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CalculatorKeyboard(
-                          onValueChange:(value){
-                            setState(() {
-                              if(value != "ok"){
-                                if (value == "AC"){
-                                  money = "";
-                                  myController.text = money;
-                                  log("123 ${value}");
-                                }
-                                else{
-                                  money += value;
-                                  myController.text = money;
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CalculatorKeyboard(
+                      onValueChange:(value){
+                        setState(() {
+                          if(value != "ok"){
+                            if (value == "AC"){
+                              money = "";
+                              myController.text = money;
+                              log("123 ${value}");
+                            }
+                            else{
+                              money += value;
+                              myController.text = money;
 
-                                }
-                              }
-                              else{
-                                allStatus=  [];
-                                allStatus.add(myController.text);
-                                allStatus.add(selectedValue);
-                                allStatus.add(_dateTime);
-                                allStatus.add(choice_IncomePay);
-                                isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
-                                if(isButtonAbled){
-                                  _save();
-                                  Navigator.pop(context);
-                                }
-                                else{
-                                  showAlert(context);
-                                }
-                              }
-                            });
-                            print(value);
-                          },
-                      ),
-                    ],
-                  ),
+                            }
+                          }
+                          else{
+                            allStatus=  [];
+                            allStatus.add(int.parse(myController.text));
+                            allStatus.add(confirm_IncomePay.indexOf(selectedValue));
+                            allStatus.add(_dateTime.toString());
+                            allStatus.add(choice_IncomePay);
+                            isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
+                            if(isButtonAbled){
+                              Provider.of<HomeAccountList>(context, listen: false).addItem(allStatus);
+                              Navigator.pop(context);
+                            }
+                            else{
+                              showAlert(context);
+                            }
+                          }
+                        });
+                        print(value);
+                      },
+                    ),
+                  ],
                 ),
+              ),
             ),
             // 下方的確認或是刪除
             Expanded(
@@ -346,18 +342,13 @@ class _AccountInputViewState extends State<AccountInputView> {
                     IconButton(
                         onPressed: (){
                           allStatus=  [];
-                          allStatus.add(money);
-                          allStatus.add(selectedValue);
-                          allStatus.add(_dateTime);
+                          allStatus.add(int.parse(myController.text));
+                          allStatus.add(confirm_IncomePay.indexOf(selectedValue));
+                          allStatus.add(_dateTime.toString());
                           allStatus.add(choice_IncomePay);
-                          log("456${allStatus}");
-                          //print(choice_IncomePay);
-                          // CheckDoneAll(allStatus);
-
                           isButtonAbled = CheckDoneAll(allStatus, isButtonAbled);
-                          log("isButtonAbled ${isButtonAbled}");
-                          if(isButtonAbled = true){
-                            _save();
+                          if(isButtonAbled){
+                            Provider.of<HomeAccountList>(context, listen: false).addItem(allStatus);
                             Navigator.pop(context);
                           }
                           else{

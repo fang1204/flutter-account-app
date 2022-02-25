@@ -6,6 +6,8 @@ import 'package:account_app/model/bill_data.dart';
 import 'package:account_app/model/line.dart';
 import 'package:account_app/utils/util.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../model/pie.dart';
@@ -29,12 +31,79 @@ class HomeAccountList extends ChangeNotifier {
   List _tmp=[];
   List get tmp => _tmp;
   String previousData = "";
+
+  List _dateList = [];
+  List get dateList => _dateList;
+
+  final Color colorFont = Color.fromARGB(0xff, 64, 102, 99);
+  final Color colorback = Color.fromARGB(0xFF, 181, 215, 212);
+  final DateFormat formatter = DateFormat('yyyy月MM');
+
+  int _pickerYear = DateTime.now().year;
+  int get pickerYear => _pickerYear;
+
+  DateTime _selectedMonth = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime get selectedMonth =>_selectedMonth;
+  bool _pickerOpen = false;
+  bool get pickerOpen => _pickerOpen;
+
+  switchPicker() {
+    _pickerOpen ^= true;
+    List ym = DateFormat('yyyy月MM').format(_selectedMonth).split('月');
+    _dateList = todate(_tmp,ym[0], ym[1]);
+    notifyListeners();
+  }
+  switchPickerYear(int i){
+    _pickerYear += i;
+    notifyListeners();
+  }
+  switchPickerMonth(int i){
+    _selectedMonth = DateTime(_pickerYear, i, 1);
+    notifyListeners();
+  }
+
+
+  List todate(var dict, String y,String m){
+    List dList = [];
+    for(var i in dict){
+      if((i['date'].split('-')[0]==y)&(i['date'].split('-')[1]==m)){
+        dList.add(i);
+      }
+    }
+    return dList;
+  }
+
+
   void OutputVar() async {
+
     previousData = await prefs.getBillData();
+
     if (previousData.isNotEmpty) {
       _tmp = jsonDecode(previousData);
       _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
+      List ym = DateFormat('yyyy月MM').format(_selectedMonth).split('月');
+      _dateList = todate(_tmp,ym[0],ym[1]);
     }
+    _p_n = cal();
+    _chartData = getChartData(_p_n[0],_p_n[1]);
+    _lineChartData = getLineChartData(_tmp);
+
+    notifyListeners();
+  }
+
+
+
+  addItem(List allStatus) async {
+    BillData perData = BillData(
+        type: allStatus[3],
+        date: allStatus[2],
+        itemType: allStatus[1],
+        quantity:allStatus[0]
+    );
+
+    _tmp.add(perData.toJson());
+    prefs.saveBillData(jsonEncode(_tmp));
+    _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
     _p_n = cal();
     _chartData = getChartData(_p_n[0],_p_n[1]);
     _lineChartData = getLineChartData(_tmp);
@@ -50,11 +119,8 @@ class HomeAccountList extends ChangeNotifier {
     _chartData = getChartData(_p_n[0],_p_n[1]);
     _lineChartData = getLineChartData(_tmp);
     notifyListeners();
-
   }
   editItem(int editIndex,List allStatus) async {
-    log("edit ${editIndex}");
-
     BillData perData = BillData(
         type: allStatus[3],
         date: allStatus[2],
@@ -64,6 +130,7 @@ class HomeAccountList extends ChangeNotifier {
 
     _tmp.add(perData.toJson());
     _tmp.removeAt(editIndex);
+
     prefs.saveBillData(jsonEncode(_tmp));
     _totalData = _tmp.map((e) => BillData.fromJson(e)).toList();
     _p_n = cal();
@@ -152,11 +219,6 @@ class HomeAccountList extends ChangeNotifier {
       _expensesLineChartData.add(LineData(key,value[1]));
       _balanceLineChartData.add(LineData(key,value[2]));
     });
-    // _incomeLineChartData.add(LineData('2月10日',1111));
-    // newData.forEach((key, value) {
-    //   _incomeLineChartData.add(LineData('2月10日',value[2]));
-    // });
-    // log("_incomeLineChartData  ${_incomeLineChartData}");
 
     _lineChartData = [_incomeLineChartData,_expensesLineChartData,_balanceLineChartData];
     return _lineChartData;
