@@ -136,6 +136,8 @@ class _AccountInputViewState extends State<AccountInputView> {
       ),
       resizeToAvoidBottomInset: false,
       body: Container(
+        width: 100.w, // This will take 20% of the screen's width
+        height: Adaptive.h(100),
         child: Column(
           crossAxisAlignment:CrossAxisAlignment.center,
           children: [

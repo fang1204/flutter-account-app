@@ -1,18 +1,12 @@
-
 import 'dart:developer';
-
 import 'package:account_app/data/home_account_list.dart';
 import 'package:account_app/utils/expenses_icons.dart';
 import 'package:account_app/utils/shared_preference_util.dart';
 import 'package:account_app/widget/items_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../model/bill_data.dart';
 import 'custom_icons.dart';
-
-
-
 List typeToList(int t, int typeName){
     String s, p_n;
     var icontype;
@@ -61,7 +55,6 @@ String formatDate(String itemDate){
 
   return formatted;
 }
-
 
 ChangeColor(int choice_IncomePay){
   final Color colorActiveFont = Color.fromARGB(0xff, 246 , 236, 192);

@@ -39,10 +39,11 @@ class AboutPage extends StatelessWidget {
             Icons.keyboard_arrow_left,
           ),
           onPressed: () {
+            Navigator.pop(context);
             // Navigator.pushReplacementNamed(context, "/setting");
-            Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context)=>SettingPage()));
+            // Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //         builder: (context)=>SettingPage()));
           },
         ),
         title: Text('About me'),

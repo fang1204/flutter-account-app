@@ -323,7 +323,8 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Colors.white,
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AccountInputView()));
+              MaterialPageRoute(builder: (context) => AccountInputView())).then((value) => homeAccountList!.OutputVar());
+
         },
         child: Icon(Icons.add),
       ),
@@ -331,3 +332,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+// builder: (context)=>AccountInputView())).then((value) => homeAccountList!.OutputVar());
