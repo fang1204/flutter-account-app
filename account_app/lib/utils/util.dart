@@ -75,7 +75,6 @@ ChangeColor(int choice_IncomePay){
   }
 }
 
-
 onChange(String value){
   List notNumberList = ["AC", "ok"];
   if (notNumberList.contains(value)){
